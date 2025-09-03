@@ -1,0 +1,102 @@
+export const User = [
+    {
+        "user_id": "U001",
+        "name": "김민수",
+        "email": "minsu@example.com",
+        "password": "hashed_pw1",
+        "gender": "M",
+        "birth": "1995-06-15",
+        "isDelete": false,
+        "created_at": "2025-09-01 10:00:00",
+        "updated_at": "2025-09-01 10:00:00"
+    },
+    {
+        "user_id": "U002",
+        "name": "이영희",
+        "email": "younghee@example.com",
+        "password": "hashed_pw2",
+        "gender": "F",
+        "birth": "1998-11-20",
+        "isDelete": false,
+        "created_at": "2025-09-01 10:00:00",
+        "updated_at": "2025-09-01 10:00:00"
+    }
+]
+export const data = [
+    {
+            "corp_id": "C001",
+            "corp_name": "스타트업A",
+            "corp_tag": "핀테크",
+            "corp_profile": "간편 송금 서비스 제공",
+            "total_investment": "₩3,000,000,000",
+            "corp_sales": 1500000000,
+            "employee": 45,
+            "created_at": "2025-09-01 09:00:00",
+            "updated_at": "2025-09-01 09:00:00"
+        },
+        {
+            "corp_id": "C002",
+            "corp_name": "스타트업B",
+            "corp_tag": "헬스케어",
+            "corp_profile": "AI 기반 건강 관리 솔루션",
+            "total_investment": "₩5,000,000,000",
+            "corp_sales": 2500000000,
+            "employee": 60,
+            "created_at": "2025-09-01 09:00:00",
+            "updated_at": "2025-09-01 09:00:00"
+        }
+]
+
+        
+
+    "my_corps": [
+        {
+            "my_corp_id": "MC001",
+            "corp_id": "C001",
+            "user_id": "U001",
+            "created_at": "2025-09-01 11:00:00",
+            "updated_at": "2025-09-01 11:00:00"
+        }
+    ],
+    "accounts": [
+        {
+            "account_id": "A001",
+            "corp_id": "C001",
+            "user_id": "U001",
+            "created_at": "2025-09-01 12:00:00",
+            "updated_at": "2025-09-01 12:00:00"
+        }
+    ],
+    "investments": [
+        {
+            "investment_id": "I001",
+            "account_id": "A001",
+            "corp_id": "C001",
+            "user_id": "U001",
+            "amount": 5000000,
+            "amount_comment": "초기 투자",
+            "created_at": "2025-09-01 12:30:00",
+            "updated_at": "2025-09-01 12:30:00"
+        }
+    ],
+    "compare_corps": [
+        {
+            "compare_corp": "CC001",
+            "corp_id": "C001",
+            "user_id": "U001",
+            "created_at": "2025-09-01 13:00:00",
+            "updated_at": "2025-09-01 13:00:00"
+        }
+    ],
+    "selections": [
+        {
+            "count_id": "SL001",
+            "corp_id": "C001",
+            "user_id": "U001",
+            "my_compare_corp": 1,
+            "compare_corp": 2,
+            "created_at": "2025-09-01 13:10:00",
+            "updated_at": "2025-09-01 13:10:00"
+        }
+    ]
+}

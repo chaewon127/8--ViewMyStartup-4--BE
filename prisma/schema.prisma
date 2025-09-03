@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 유저
+model User {
+  user_id  String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  gender   String
+  birth    DateTime
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  isDeleted  Boolean  @default(false)
+
+  MyStartup   MyStartup[]
+  CountCorp   CountCorp[]
+  CompareCorp CompareCorp[]
+  Investment  Investment[]
+  Account     Account?
+}
+
+// 투자
+model Investment {
+  investment_id  String      @id @default(uuid())
+  amount         Int
+  amount_comment String
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+  isDeleted      Boolean     @default(false)
+  user           User        @relation(fields: [user_id], references: [user_id])
+  user_id        String
+  corp           Corporation @relation(fields: [corp_id], references: [corp_id])
+  corp_id        String
+  account        Account     @relation(fields: [account_id], references: [account_id])
+  account_id     String
+}
+
+// 투자 기록(장부)
+model Account {
+  account_id String       @id @default(uuid())
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  user       User         @relation(fields: [user_id], references: [user_id])
+  user_id    String       @unique
+  corp       Corporation  @relation(fields: [corp_id], references: [corp_id])
+  corp_id    String
+  Investment Investment[]
+}
+
+// 기업
+model Corporation {
+  corp_id          String        @id @default(uuid())
+  corp_name        String
+  corp_tag         String
+  corp_profile     String?
+  total_investment String?
+  corp_sales       Int           @default(0)
+  employee         Int
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  MyStartup        MyStartup[]
+  CountCorp        CountCorp[]
+  CompareCorp      CompareCorp[]
+  Account          Account[]
+  Investment       Investment[]
+}
+
+// 나의 기업
+model MyStartup {
+  mycorp_id  String      @id @default(uuid())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  isDeleted  Boolean     @default(false)
+  user       User        @relation(fields: [user_id], references: [user_id])
+  user_id    String
+  corp       Corporation @relation(fields: [corp_id], references: [corp_id])
+  corp_id    String
+}
+
+// 비교 기업
+model CompareCorp {
+  comparecorp_id String      @id @default(uuid())
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+  isDeleted      Boolean     @default(false)
+  user           User        @relation(fields: [user_id], references: [user_id])
+  user_id        String
+  corp           Corporation @relation(fields: [corp_id], references: [corp_id])
+  corp_id        String
+}
+
+// 기업 비교 횟수
+model CountCorp {
+  countcorp_id    String      @id @default(uuid())
+  my_compare_corp Int?        @default(0)
+  compare_corp    Int?        @default(0)
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  user            User        @relation(fields: [user_id], references: [user_id])
+  user_id         String
+  corp            Corporation @relation(fields: [corp_id], references: [corp_id])
+  corp_id         String
+}
