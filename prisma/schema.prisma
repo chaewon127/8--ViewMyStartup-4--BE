@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 유저
+model User {
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  gender   Gender
+  birth    DateTime
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  isDeleted  Boolean  @default(false)
+
+  My_compare_corp My_compare_corp[]
+  Account         Account[]
+  Compare_corp    Compare_corp[]
+  Option_count    Option_count[]
+}
+
+// M = 남자, F = 여자, N = 선택안함
+enum Gender {
+  M
+  F
+  N
+}
+
+// 기업
+model Corp {
+  id               String   @id @default(uuid())
+  corp_name        String
+  corp_tag         String
+  corp_profile     String
+  total_investment BigInt   @default(0)
+  corp_sales       BigInt   @default(0)
+  employee         Int
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  My_compare_corp My_compare_corp[]
+  Account         Account[]
+  Compare_corp    Compare_corp[]
+  Option_count    Option_count[]
+}
+
+// 기업 비교 선택 횟수 테이블
+model Option_count {
+  id String @id @default(uuid())
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+
+  corp   Corp?   @relation(fields: [corpId], references: [id], onDelete: Cascade)
+  corpId String?
+
+  my_compare_corp Int      @default(0)
+  compare_corp    Int      @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+// 비교 기업
+model Compare_corp {
+  id String @id @default(uuid())
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  corp   Corp?   @relation(fields: [corpId], references: [id])
+  corpId String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  isDeleted  Boolean  @default(false)
+}
+
+// 나의 기업
+model My_compare_corp {
+  id String @id @default(uuid())
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  corp   Corp?   @relation(fields: [corpId], references: [id])
+  corpId String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  isDeleted  Boolean  @default(false)
+}
+
+// 투자
+model Investment {
+  id String @id @default(uuid())
+
+  account   Account? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String?
+
+  amount         Int
+  amount_comment String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  isDeleted  Boolean  @default(false)
+}
+
+// 투자 기록(장부)
+model Account {
+  id String @id @default(uuid())
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  corp   Corp?   @relation(fields: [corpId], references: [id])
+  corpId String?
+
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  Investment Investment[]
+}
