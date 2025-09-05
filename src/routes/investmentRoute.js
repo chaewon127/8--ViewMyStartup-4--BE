@@ -12,12 +12,14 @@ const router = express.Router();
   * POST /investments/:id -> 투자 테이블의 내용을 기록하는게 투자 기록이라 같이 CRUD... 이해 못함..
 */
 
-router.get("/investment", investmentController.getInvestments);
+router.get("/", investmentController.getInvestments);
+
 router.get("/corp/:id", investmentController.getInvestmentComments);
 // router.get("/investments/:id", investmentController.getInvestmentById);
-router.post("/", investmentController.createInvestmentComment);
+router.post("/corp/:id", investmentController.createInvestmentComment);
 router.patch("/corp/:id", investmentController.updateInvestmentComment);
 router.delete("/corp/:id", investmentController.deleteInvestmentComment);
-router.post("/", investmentController.saveAccount);
+
+router.post("/account", investmentController.saveAccount);
 
 export default router;

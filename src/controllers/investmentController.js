@@ -7,13 +7,24 @@ const investmentController = {
       offset = 0,
       limit = 10,
       sortBy = "virtual",
-      order = "desc",
+      order = "Highest",
     } = req.query;
+    let orderBy;
+    switch (order) {
+      case "Highest":
+        orderBy = "desc";
+        break;
+      case "Lowest":
+        orderBy = "asc";
+        break;
+      default:
+        orderBy = "desc";
+    }
     const investments = await investmentService.getInvestments({
       offset,
       limit,
       sortBy,
-      order,
+      order: orderBy,
     });
     res.send({ success: true, ...investments });
   },

@@ -5,17 +5,6 @@ import { skip } from "node:test";
 const investmentService = {
   /* 투자 현황 조회 페이지 */
   getInvestments: async ({ offset, limit, sortBy, order }) => {
-    let orderBy;
-    switch (order) {
-      case "Highest":
-        orderBy = "desc";
-        break;
-      case "Lowest":
-        orderBy = "asc";
-        break;
-      default:
-        orderBy = "desc";
-    }
     switch (sortBy) {
       case "virtual":
         // 가상 투자 금액 합산 후 정렬, 합산은 DB에서 SUM 쿼리로 실행
