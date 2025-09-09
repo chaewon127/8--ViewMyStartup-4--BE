@@ -49,6 +49,8 @@ model Option_count {
   updated_at      DateTime @updatedAt
   corp            Corp?    @relation(fields: [corpId], references: [id], onDelete: Cascade)
   user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, corpId])
 }
 
 model Compare_corp {
@@ -60,6 +62,8 @@ model Compare_corp {
   isDeleted  Boolean  @default(false)
   corp       Corp?    @relation(fields: [corpId], references: [id])
   user       User?    @relation(fields: [userId], references: [id])
+
+  @@unique([userId, corpId])
 }
 
 model My_compare_corp {
@@ -71,6 +75,8 @@ model My_compare_corp {
   isDeleted  Boolean  @default(false)
   corp       Corp?    @relation(fields: [corpId], references: [id])
   user       User?    @relation(fields: [userId], references: [id])
+
+  @@unique([userId, corpId])
 }
 
 model Investment {
