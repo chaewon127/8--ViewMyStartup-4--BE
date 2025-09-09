@@ -6,7 +6,9 @@
     "express": "^5.1.0",
     "is-email": "^1.0.2",
     "is-uuid": "^1.0.2",
-    "superstruct": "^1.0.3"
+    "superstruct": "^1.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
