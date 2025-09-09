@@ -48,14 +48,11 @@ const investmentService = {
       skip: parseInt(offset),
       take: parseInt(limit),
       select: {
-        id: true,
-        name: true,
-        amount: true,
-        comment: true,
+        Account: true,
       },
     });
 
-    if (!investmentComment || investmentComments.length === 0) {
+    if (!investmentComments || investmentComments.length === 0) {
       throw new Error("No comments found");
     }
 
@@ -98,6 +95,9 @@ const investmentService = {
 
     const investmentComment = await prisma.investment.create({
       data: { name, amount, comment, password: hashedPassword },
+      select: {
+        Account: true,
+      },
     });
     return investmentComment;
   },
@@ -106,6 +106,9 @@ const investmentService = {
   updateInvestmentComment: async (id, { name, amount, comment, password }) => {
     const investmentComment = await prisma.investment.findUnique({
       where: { id },
+      select: {
+        Account: true,
+      },
     });
     if (!investmentComment) {
       throw new Error("Cannot find given id");
@@ -139,23 +142,26 @@ const investmentService = {
 
     await prisma.investment.delete({
       where: { id },
+      select: {
+        Account: true,
+      },
     });
     return true;
   },
 
   /* 투자 기록 저장 */
-  saveAccount: async ({ userId, corpId, name, amount, comment }) => {
-    const account = await prisma.account.create({
-      data: {
-        userId: userId,
-        corpId: corpId,
-        name,
-        amount,
-        comment,
-      },
-    });
-    return account;
-  },
+  // saveAccount: async ({ userId, corpId, name, amount, comment }) => {
+  //   const account = await prisma.account.create({
+  //     data: {
+  //       userId: userId,
+  //       corpId: corpId,
+  //       name,
+  //       amount,
+  //       comment,
+  //     },
+  //   });
+  //   return account;
+  // },
 };
 
 export default investmentService;

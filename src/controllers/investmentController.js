@@ -85,17 +85,17 @@ const investmentController = {
   },
 
   //투자 기록 저장
-  saveAccount: async (req, res) => {
-    const { userId, corpId, name, amount, comment } = req.body;
-    const account = await investmentService.saveAccount({
-      userId,
-      corpId,
-      name,
-      amount,
-      comment,
-    });
-    res.status(201).send({ message: "Investment record saved", account });
-  },
+  // saveAccount: async (req, res) => {
+  //   const { userId, corpId, name, amount, comment } = req.body;
+  //   const account = await investmentService.saveAccount({
+  //     userId,
+  //     corpId,
+  //     name,
+  //     amount,
+  //     comment,
+  //   });
+  //   res.status(201).send({ message: "Investment record saved", account });
+  // },
 };
 
 export default investmentController;
