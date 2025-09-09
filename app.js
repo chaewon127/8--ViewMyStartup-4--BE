@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
 import { DATABASE_URL } from "./src/config/env.js";
-import { router as investmentRouter } from "./src/routes/investmentRoute.js";
-import { router as corpRouter } from "./src/route/corpRoute.js";
-import { router as compareTotalRouter } from "./src/route/compareTotalRoute.js";
-import { router as compareRouter } from "./src/route/compareRoute.js";
+import investmentRouter from "./src/routes/investmentRoute.js";
+import { router as corpRouter } from "./src/routes/corpRoute.js";
+import { router as compareTotalRouter } from "./src/routes/compareTotalRoute.js";
+import { router as compareRouter } from "./src/routes/compareRoute.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./src/swagger/swagger.js";
 

@@ -1,8 +1,6 @@
 import { Router } from "express";
-import { asyncHandler } from "../middlewares/asyncHandler.js";
-import { getCorpTotalController } from '../controllers/compareTotalController.js'
-
-
+import asyncHandler from "../middlewares/asyncHandler.js";
+import { getCorpTotalController } from "../controllers/compareTotalController.js";
 
 export const router = Router();
 /**
@@ -16,4 +14,4 @@ export const router = Router();
  *       200:
  *         description: 전체 기업 비교 데이터를 성공적으로 반환
  */
-router.get('/corpTotals', asyncHandler(getCorpTotalController));
+router.get("/corpTotals", asyncHandler(getCorpTotalController));
