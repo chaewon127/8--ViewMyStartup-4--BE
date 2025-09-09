@@ -19,7 +19,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "build": "npx prisma generate"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
