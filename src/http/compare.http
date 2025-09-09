@@ -1,0 +1,72 @@
+############################################################
+//    여기서 따로 작성하지 않은 id는 전부 기업 id           ///
+//    유저 기능은 아직 작성하지 않아서 compareSerive에      ///
+//    유저id 디폴트로 세팅하고 DB에 저장했음                ///
+############################################################
+
+///비교 할때 조회 되는 테이블 + 다른 테이블에 조회할 전체 리스트 생성용
+GET http://localhost:3000/compare
+
+//위랑 같은데 단일 id 
+
+GET http://localhost:3000/compare/da9257f3-4873-4f30-ac8d-c7069d51db13
+
+
+
+
+###
+//비교 테이블 조회 + 전체 리스트 
+GET http://localhost:3000/compare/corpinfo
+
+###
+// 나의 기업 테이블 조회 + 전체 리스트
+GET http://localhost:3000/compare/mycorpinfo
+
+###
+// 조회 가능하다는걸 보여줌
+//조회 방식 6가지 가능(salesHighest, investmentHighest,
+//                    employeeHighest, investmentLowest,
+//                    salesLowest, employeeLowest) 이거 그대로 가능
+GET http://localhost:3000/compare/corpinfo?limit=10&offset=0&order=employeeLowest
+
+####
+GET http://localhost:3000/compare/corpinfo
+
+###
+GET http://localhost:3000/compare/mycorpinfo
+
+
+
+
+//// 이 아래부터 실제 기능
+###
+//비교 기업 추가
+POST http://localhost:3000/compare/corpinfo/6cec4338-bb7a-4bb5-9086-c80595b6ce71
+
+###
+// 나의 기업 추가
+POST http://localhost:3000/compare/mycorpinfo/6cec4338-bb7a-4bb5-9086-c80595b6ce71
+
+### 
+
+###
+// delet 실행하고 post 하면 그대로인데 
+// option 확인용 조회 
+// 나의 기업, 비교 기업 세팅 아래 추가하겠음
+
+// 비교 기업 
+DELETE http://localhost:3000/compare/corpinfo/dae06a85-ab83-46b7-a3a7-8adfef1a6fd5
+
+###
+// 나의 기업 
+DELETE http://localhost:3000/compare/mycorpinfo/dae06a85-ab83-46b7-a3a7-8adfef1a6fd5
+
+
+###
+
+// 비교 현황 -> 나의 기업 선택 횟수 + 비교 기업 선택 횟수
+GET http://localhost:3000/corpTotals
+
+###
+// order => myCompareLowest, myCompareHighest,compareHighest,compareLowest
+GET http://localhost:3000/corpTotals?limit=10&offset=0&order=compareHighest
