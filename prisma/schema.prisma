@@ -41,40 +41,43 @@ model Corp {
 
 model Option_count {
   id              String   @id @default(uuid())
-  userId          String?
-  corpId          String?
   my_compare_corp Int      @default(0)
   compare_corp    Int      @default(0)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
-  corp            Corp?    @relation(fields: [corpId], references: [id], onDelete: Cascade)
-  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+  corp   Corp?   @relation(fields: [corpId], references: [id], onDelete: Cascade)
+  corpId String?
 
   @@unique([userId, corpId])
 }
 
 model Compare_corp {
   id         String   @id @default(uuid())
-  userId     String?
-  corpId     String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   isDeleted  Boolean  @default(false)
-  corp       Corp?    @relation(fields: [corpId], references: [id])
-  user       User?    @relation(fields: [userId], references: [id])
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+  corp   Corp?   @relation(fields: [corpId], references: [id])
+  corpId String?
 
   @@unique([userId, corpId])
 }
 
 model My_compare_corp {
   id         String   @id @default(uuid())
-  userId     String?
-  corpId     String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   isDeleted  Boolean  @default(false)
-  corp       Corp?    @relation(fields: [corpId], references: [id])
-  user       User?    @relation(fields: [userId], references: [id])
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+  corp   Corp?   @relation(fields: [corpId], references: [id])
+  corpId String?
 
   @@unique([userId, corpId])
 }
