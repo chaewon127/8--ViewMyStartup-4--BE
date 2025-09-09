@@ -30,6 +30,22 @@ const options = {
             updatedAt: { type: "string", format: "date-time" },
           },
         },
+        Corp: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" },
+            industry: { type: "string" },
+          },
+        },
+        Compare: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            corpId: { type: "string" },
+            selectedAt: { type: "string", format: "date-time" },
+          },
+        },
       },
     },
   },

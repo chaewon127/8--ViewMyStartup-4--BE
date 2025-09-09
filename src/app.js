@@ -5,6 +5,8 @@ import { router as investmentRouter } from "./routes/investmentRoute.js";
 import { router as corpRouter } from "./routes/corpRoute.js";
 import { router as compareTotalRouter } from "./routes/compareTotalRoute.js";
 import { router as compareRouter } from "./routes/compareRoute.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger/swagger.js";
 
 //투자금 등등은 너무 커서 BigInt 로 세팅한거 조회하기 위한 작업
 BigInt.prototype.toJSON = function () {
