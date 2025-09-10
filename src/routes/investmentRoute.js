@@ -49,14 +49,87 @@ router.get(
   asyncHandler(investmentController.getInvestmentComments)
 );
 
+/**
+ * @openapi
+ * /investment/corp/{id}:
+ *   post:
+ *     summary: 특정 기업 투자 댓글 작성
+ *     tags: [Investment]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 기업 ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 example: "이 기업은 성장 가능성이 높습니다."
+ *     responses:
+ *       201:
+ *         description: 댓글 생성 성공
+ */
 router.post(
   "/corp/:id",
   asyncHandler(investmentController.createInvestmentComment)
 );
+
+/**
+ * @openapi
+ * /investment/corp/{id}:
+ *   patch:
+ *     summary: 특정 기업 투자 댓글 수정
+ *     tags: [Investment]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 기업 ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 example: "수정된 댓글 내용"
+ *     responses:
+ *       200:
+ *         description: 댓글 수정 성공
+ */
 router.patch(
   "/corp/:id",
   asyncHandler(investmentController.updateInvestmentComment)
 );
+
+/**
+ * @openapi
+ * /investment/corp/{id}:
+ *   delete:
+ *     summary: 특정 기업 투자 댓글 삭제
+ *     tags: [Investment]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 기업 ID
+ *     responses:
+ *       200:
+ *         description: 댓글 삭제 성공
+ */
 router.delete(
   "/corp/:id",
   asyncHandler(investmentController.deleteInvestmentComment)
