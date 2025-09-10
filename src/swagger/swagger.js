@@ -9,7 +9,12 @@ const options = {
       version: "1.0.0",
       description: "ViewMyStartup 백엔드 API 문서",
     },
-    servers: [{ url: "http://localhost:3000", description: "Local" }],
+    servers: [
+      {
+        url: "https://eight-viewmystartup-4-be.onrender.com",
+        description: "Local",
+      },
+    ],
   },
   apis: ["./src/routes/*.js"],
 };
