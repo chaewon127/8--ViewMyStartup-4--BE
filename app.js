@@ -15,6 +15,7 @@ BigInt.prototype.toJSON = function () {
 
 const app = express();
 
+//cors 오류 방지 - 모든 도메인 허용
 app.use(cors());
 app.use(express.json());
 
@@ -29,6 +30,14 @@ app.use("/corp", corpRouter);
 app.use("/corpTotals", compareTotalRouter);
 app.use("/compare", compareRouter);
 app.use("/investments", investmentRouter);
+
+//cron 스케쥴러
+var cron = require("node-cron");
+
+// second minute hour day-of-month month day-of-week
+cron.schedule("* * * * *", function () {
+  console.log("node-cron 실행 테스트");
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

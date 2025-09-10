@@ -11,10 +11,11 @@
     "express": "^5.1.0",
     "is-email": "^1.0.2",
     "is-uuid": "^1.0.2",
+    "node-cron": "^4.2.1",
+    "prisma": "^6.15.0",
     "superstruct": "^1.0.3",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "prisma": "^6.15.0"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
