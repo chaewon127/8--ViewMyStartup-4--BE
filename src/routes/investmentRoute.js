@@ -57,7 +57,7 @@ const router = express.Router();
  *                   items:
  *                     $ref: '#/components/schemas/Investment'
  */
-router.get("/investments", asyncHandler(investmentController.getInvestments));
+router.get("/", asyncHandler(investmentController.getInvestments));
 
 /**
  * @openapi

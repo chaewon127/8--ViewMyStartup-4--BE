@@ -35,10 +35,7 @@ export const router = Router();
  *       '200':
  *         description: 비교 기업 선택 및 옵션 카운트 완료
  */
-router.post(
-  "/compare/corpinfo/:id",
-  asyncHandler(getCompareandOptionCountController)
-);
+router.post("/corpinfo/:id", asyncHandler(getCompareandOptionCountController));
 
 /**
  * @openapi
@@ -59,7 +56,7 @@ router.post(
  *         description: 비교 기업 선택 및 옵션 카운트 완료
  */
 router.post(
-  "/compare/mycorpinfo/:id",
+  "/mycorpinfo/:id",
   asyncHandler(getMyCompareandOptionCountController)
 );
 
@@ -98,7 +95,7 @@ router.post(
  *       '200':
  *         description: 기업 비교 데이터 목록 반환
  */
-router.get("/compare/corpinfo", asyncHandler(getCompareController));
+router.get("/corpinfo", asyncHandler(getCompareController));
 
 /**
  * @openapi
@@ -130,7 +127,7 @@ router.get("/compare/corpinfo", asyncHandler(getCompareController));
  *       '200':
  *         description: 나의 기업 비교 데이터 목록 반환
  */
-router.get("/compare/mycorpinfo", asyncHandler(getMyCompareController));
+router.get("/mycorpinfo", asyncHandler(getMyCompareController));
 
 // 비교 현황 페이지
 
@@ -154,10 +151,7 @@ router.get("/compare/mycorpinfo", asyncHandler(getMyCompareController));
  *       '200':
  *         description: 기업 비교 데이터 삭제 완료
  */
-router.delete(
-  "/compare/corpinfo/:id",
-  asyncHandler(deleteCompareCorpController)
-);
+router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
 
 /**
  * @openapi
@@ -177,10 +171,7 @@ router.delete(
  *       '200':
  *         description: 나의 기업 비교 데이터 삭제 완료
  */
-router.delete(
-  "/compare/mycorpinfo/:id",
-  asyncHandler(deleteMyCompareCorpController)
-);
+router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
 
 // 이거 아래 안내리면 오류남 그냥 기업 조회 + 기업 선택 등
 /**
@@ -218,7 +209,7 @@ router.delete(
  *       '200':
  *         description: 전체 비교 기업 목록 반환
  */
-router.get("/compare", asyncHandler(listCorpinCompareController));
+router.get("/", asyncHandler(listCorpinCompareController));
 
 /**
  * @openapi
@@ -240,4 +231,4 @@ router.get("/compare", asyncHandler(listCorpinCompareController));
  *       '404':
  *         description: 해당 기업을 찾을 수 없음
  */
-router.get("/compare/:id", asyncHandler(getCorpinCompareController));
+router.get("/:id", asyncHandler(getCorpinCompareController));

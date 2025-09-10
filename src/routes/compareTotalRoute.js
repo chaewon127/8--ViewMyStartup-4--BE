@@ -62,4 +62,4 @@ export const router = Router();
  *                 total:
  *                   type: integer
  */
-router.get("/corpTotals", asyncHandler(getCorpTotalController));
+router.get("/", asyncHandler(getCorpTotalController));

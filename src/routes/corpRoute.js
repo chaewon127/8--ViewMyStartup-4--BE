@@ -57,7 +57,7 @@ export const router = Router();
  *               items:
  *                 $ref: '#/components/schemas/Corp'
  */
-router.get("/corp", asyncHandler(listCorpController));
+router.get("/", asyncHandler(listCorpController));
 
 /**
  * @openapi
@@ -112,4 +112,4 @@ router.get("/corp", asyncHandler(listCorpController));
  *       '404':
  *         description: 기업을 찾을 수 없음
  */
-router.get("/corp/:id", asyncHandler(getCorpController));
+router.get("/:id", asyncHandler(getCorpController));
