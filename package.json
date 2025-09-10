@@ -1,4 +1,7 @@
 {
+  "name": "viewmystartup-backend",
+  "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "@prisma/client": "^6.15.0",
     "bcrypt": "^6.0.0",
@@ -8,19 +11,21 @@
     "express": "^5.1.0",
     "is-email": "^1.0.2",
     "is-uuid": "^1.0.2",
-    "prisma": "^6.15.0",
     "superstruct": "^1.0.3",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "prisma": "^6.15.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
   },
-  "type": "module",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "postinstall": "prisma generate"
+    "postinstall": "npx prisma generate"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
