@@ -71,6 +71,8 @@ model Option_count {
   compare_corp    Int      @default(0)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+
+  @@unique([userId, corpId])
 }
 
 // 비교 기업
@@ -86,6 +88,8 @@ model Compare_corp {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   isDeleted  Boolean  @default(false)
+
+  @@unique([userId, corpId])
 }
 
 // 나의 기업
@@ -101,6 +105,8 @@ model My_compare_corp {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   isDeleted  Boolean  @default(false)
+
+  @@unique([userId, corpId])
 }
 
 // 투자
