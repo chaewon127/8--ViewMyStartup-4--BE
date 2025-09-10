@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * /investment/investments:
+ * /investments:
  *   get:
  *     summary: 투자 리스트 조회
  *     tags:
