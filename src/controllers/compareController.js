@@ -8,6 +8,10 @@ import {
   getMyCompare,
   deleteCompareCorp,
   deleteMyCompareCorp,
+  getMyCompareAndMyCompare,
+  getRankingCompare,
+  getOrderCompare,
+  getTotalCompare
 } from "../services/compareService.js";
     
 
@@ -85,8 +89,7 @@ export async function getMyCompareController(req, res, next){
 
 export async function deleteCompareCorpController(req, res, next){
   try{
-    const { id  } = req.params;
-    const compare = await deleteCompareCorp(id);
+    const compare = await deleteCompareCorp();
     return res.send(compare);
   }
   catch(e){
@@ -98,8 +101,7 @@ export async function deleteCompareCorpController(req, res, next){
 
 export async function deleteMyCompareCorpController(req, res, next){
   try{
-    const { id  } = req.params;
-    const compare = await deleteMyCompareCorp(id);
+    const compare = await deleteMyCompareCorp();
     return res.send(compare);
   }
   catch(e){
@@ -107,3 +109,51 @@ export async function deleteMyCompareCorpController(req, res, next){
   }
 }
 
+
+
+
+export async function getMyCompareAndMyCompareController(req, res, next){
+  try{
+    const compare = await getMyCompareAndMyCompare();
+    return res.send(compare);
+  }
+  catch(e){
+    next(e);
+  }
+}
+
+export async function getRankingCompareController(req, res, next) {
+  try{
+    const {offset = 0, limit = 6, order="investment_desc"} = req.query;
+    const data = {offset, limit, order};
+    const compare = await getRankingCompare(data);
+    return res.send(compare);
+  }
+  catch(e){
+    next(e);
+  }
+}
+
+export async function getOrderCompareController(req, res, next) {
+  try{
+    const {offset = 0, limit = 6, order="investment_desc"} = req.query;
+    const data = {offset, limit, order};
+    const compare = await getOrderCompare(data);
+    return res.send(compare);
+  }
+  catch(e){
+    next(e);
+  }
+}
+
+export async function getTotalCompareController(req, res, next){
+    try{
+    const {offset = 0, limit = 6, order="investment_desc"} = req.query;
+    const data = {offset, limit, order};
+    const compare = await getTotalCompare(data);
+    return res.send(compare);
+  }
+  catch(e){
+    next(e);
+  }
+}

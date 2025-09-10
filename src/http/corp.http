@@ -16,4 +16,5 @@ GET http://localhost:3000/corp/dae06a85-ab83-46b7-a3a7-8adfef1a6fd5
 
 
 ####
-GET http://localhost:3000/corp?search=태크
+GET http://localhost:3000/corp?search=테크
+

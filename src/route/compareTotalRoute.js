@@ -5,6 +5,7 @@ import { getCorpTotalController } from '../controllers/compareTotalController.js
 
 
 export const router = Router();
+
 /**
  * @openapi
  * /corpTotals:

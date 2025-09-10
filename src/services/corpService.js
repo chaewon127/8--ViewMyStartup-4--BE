@@ -30,6 +30,7 @@ export async function listCorp({offset, limit, order, search}){
     default:
       orderBy = { total_investment: 'desc' }
   }
+
   //검색 기능 빼먹어서 검색기능 추가
   let where;
   if(search && search.trim()){
@@ -53,12 +54,33 @@ export async function listCorp({offset, limit, order, search}){
 
   const corps = await prisma.corp.findMany({
     where,
-    orderBy: [ orderBy, { created_at: 'desc' }],
+    orderBy: { created_at: 'desc' },
     skip: parseInt(offset),
     take: parseInt(limit),
   });
 
-  return corps;
+  const rankingCorp = await prisma.corp.findMany({
+    where,
+    select:{
+      id:true,
+    },
+    orderBy: [
+      { total_investment: 'desc' },
+      { created_at: 'asc' },
+      { id: 'asc' },
+    ],
+  });
+
+  const rankMap = new Map();
+  rankingCorp.forEach((row, idx) => {
+    rankMap.set(row.id, idx + 1);
+  });
+
+  const compareCorpWithRanking = corps.map((c) => ({
+    ...c,
+    investment_rank: rankMap.get(c.id) ?? null,
+  }))
+  return compareCorpWithRanking;
 }
 
 
