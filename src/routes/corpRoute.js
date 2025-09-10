@@ -19,7 +19,7 @@ export const router = Router();
  *     tags:
  *       - Corp
  *     responses:
- *       200:
+ *       '200':
  *         description: 성공적으로 반환
  */
 router.get("/corp", asyncHandler(listCorpController));
@@ -38,9 +38,9 @@ router.get("/corp", asyncHandler(listCorpController));
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: 성공적으로 반환
- *       404:
+ *       '404':
  *         description: 기업을 찾을 수 없음
  */
 router.get("/corp/:id", asyncHandler(getCorpController));

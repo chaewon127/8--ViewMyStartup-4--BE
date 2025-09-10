@@ -9,9 +9,10 @@ const router = express.Router();
  * /investment/investments:
  *  get:
  *    summary: 투자 리스트 조회
- *    tags: [Investment]
+ *    tags:
+ *      - Investment
  *    responses:
- *      200:
+ *      '200':
  *        description: 투자 리스트
  *        content:
  *          application/json:
@@ -27,7 +28,8 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
  * /investment/corp/{id}:
  *  get:
  *    summary: 특정 기업 투자 댓글 조회
- *    tags: [Investment]
+ *    tags:
+ *      - Investment
  *    parameters:
  *      - in: path
  *        name: id
@@ -35,7 +37,7 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
  *        schema:
  *          type: string
  *    responses:
- *      200:
+ *      '200':
  *        description: 댓글 리스트
  *        content:
  *          application/json:
@@ -54,7 +56,8 @@ router.get(
  * /investment/corp/{id}:
  *   post:
  *     summary: 특정 기업 투자 댓글 작성
- *     tags: [Investment]
+ *     tags:
+ *       - Investment
  *     parameters:
  *       - in: path
  *         name: id
@@ -73,7 +76,7 @@ router.get(
  *                 type: string
  *                 example: "이 기업은 성장 가능성이 높습니다."
  *     responses:
- *       201:
+ *       '201':
  *         description: 댓글 생성 성공
  */
 router.post(
@@ -86,7 +89,8 @@ router.post(
  * /investment/corp/{id}:
  *   patch:
  *     summary: 특정 기업 투자 댓글 수정
- *     tags: [Investment]
+ *     tags:
+ *       - Investment
  *     parameters:
  *       - in: path
  *         name: id
@@ -105,7 +109,7 @@ router.post(
  *                 type: string
  *                 example: "수정된 댓글 내용"
  *     responses:
- *       200:
+ *       '200':
  *         description: 댓글 수정 성공
  */
 router.patch(
@@ -118,7 +122,8 @@ router.patch(
  * /investment/corp/{id}:
  *   delete:
  *     summary: 특정 기업 투자 댓글 삭제
- *     tags: [Investment]
+ *     tags:
+ *       - Investment
  *     parameters:
  *       - in: path
  *         name: id
@@ -127,7 +132,7 @@ router.patch(
  *           type: string
  *         description: 기업 ID
  *     responses:
- *       200:
+ *       '200':
  *         description: 댓글 삭제 성공
  */
 router.delete(

@@ -30,7 +30,7 @@ export const router = Router();
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: 비교 테이블 insert 및 선택 횟수 테이블 카운트
  */
 router.post(
@@ -52,7 +52,7 @@ router.post(
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: 나의 기업 테이블 insert 및 선택 횟수 테이블 카운트
  */
 router.post(
@@ -70,7 +70,7 @@ router.post(
  *     tags:
  *       - Compare
  *     responses:
- *       200:
+ *       '200':
  *         description: 기업 비교 데이터 목록
  */
 router.get("/compare/corpinfo", asyncHandler(getCompareController));
@@ -83,7 +83,7 @@ router.get("/compare/corpinfo", asyncHandler(getCompareController));
  *     tags:
  *       - Compare
  *     responses:
- *       200:
+ *       '200':
  *         description: 나의 기업 비교 데이터 목록
  */
 router.get("/compare/mycorpinfo", asyncHandler(getMyCompareController));
@@ -106,7 +106,7 @@ router.get("/compare/mycorpinfo", asyncHandler(getMyCompareController));
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: 기업 비교 데이터 삭제 처리됨
  */
 router.delete(
@@ -128,7 +128,7 @@ router.delete(
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: 나의 기업 비교 데이터 삭제 처리됨
  */
 router.delete(
@@ -145,7 +145,7 @@ router.delete(
  *     tags:
  *       - Compare
  *     responses:
- *       200:
+ *       '200':
  *         description: 전체 기업 목록 반환
  */
 router.get("/compare", asyncHandler(listCorpinCompareController));
@@ -164,9 +164,9 @@ router.get("/compare", asyncHandler(listCorpinCompareController));
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: 단일 기업 반환
- *       404:
+ *       '404':
  *         description: 해당 기업을 찾을 수 없음
  */
 router.get("/compare/:id", asyncHandler(getCorpinCompareController));

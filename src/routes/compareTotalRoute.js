@@ -11,7 +11,7 @@ export const router = Router();
  *     tags:
  *       - Compare Total
  *     responses:
- *       200:
+ *       '200':
  *         description: 전체 기업 비교 데이터를 성공적으로 반환
  */
 router.get("/corpTotals", asyncHandler(getCorpTotalController));
