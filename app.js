@@ -20,7 +20,7 @@ app.use(express.json());
 
 //Swagger UI
 app.use(
-  "/docs",
+  "/api-docs",
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, { explorer: true })
 );
@@ -30,7 +30,7 @@ app.use("/corpTotals", compareTotalRouter);
 app.use("/compare", compareRouter);
 app.use("/investments", investmentRouter);
 
-const PORT = process.env.PORT || 5555;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/docs`);
 });
