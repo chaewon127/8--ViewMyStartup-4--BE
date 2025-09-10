@@ -31,14 +31,6 @@ app.use("/corpTotals", compareTotalRouter);
 app.use("/compare", compareRouter);
 app.use("/investments", investmentRouter);
 
-//cron 스케쥴러
-var cron = require("node-cron");
-
-// second minute hour day-of-month month day-of-week
-cron.schedule("* * * * *", function () {
-  console.log("node-cron 실행 테스트");
-});
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/api-docs`);
