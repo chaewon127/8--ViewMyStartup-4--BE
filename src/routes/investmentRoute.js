@@ -30,10 +30,10 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
  *    tags: [Investment]
  *    parameters:
  *      - in: path
- *      name: id
- *      required: true
- *      schema:
- *        type: string
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: string
  *    responses:
  *      200:
  *        description: 댓글 리스트
