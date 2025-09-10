@@ -29,11 +29,11 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
  *    summary: 특정 기업 투자 댓글 조회
  *    tags: [Investment]
  *    parameters:
- *        - in: path
- *          name: id
- *          required: true
- *          schema:
- *            type: string
+ *      - in: path
+ *      name: id
+ *      required: true
+ *      schema:
+ *        type: string
  *    responses:
  *      200:
  *        description: 댓글 리스트
