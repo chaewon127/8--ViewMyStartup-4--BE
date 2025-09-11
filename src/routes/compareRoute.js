@@ -1,5 +1,5 @@
 import { Router } from "express";
-import asyncHandler from "../middlewares/asyncHandler.js";
+import { asyncHandler } from "../middlewares/asyncHandler.js";
 import {
   listCorpinCompareController,
   getCorpinCompareController,
@@ -9,6 +9,10 @@ import {
   getMyCompareController,
   deleteCompareCorpController,
   deleteMyCompareCorpController,
+  getMyCompareAndMyCompareController,
+  getRankingCompareController,
+  getOrderCompareController,
+  getTotalCompareController
 } from "../controllers/compareController.js";
 import { roundToNearestHours } from "date-fns";
 
@@ -16,7 +20,6 @@ export const router = Router();
 
 // 선택하기 작동시 (비교, 나의 기업) 생성 + 선택 횟수 테이블 카운터 + 1
 // 만약 수정 시 isDelete를 fasle로 바꿔서 덮어쓰는 느낌으로 비교 테이블 세팅
-
 /**
  * @openapi
  * /compare/corpinfo/{id}:
@@ -30,33 +33,34 @@ export const router = Router();
  *         required: true
  *         schema:
  *           type: string
- *         description: 선택한 비교 기업 ID
  *     responses:
- *       '200':
- *         description: 비교 기업 선택 및 옵션 카운트 완료
- */
-router.post("/corpinfo/:id", asyncHandler(getCompareandOptionCountController));
-
-/**
- * @openapi
- * /compare/corpinfo/{id}:
- *   post:
- *     summary: 비교 기업 선택 및 옵션 카운트
- *     tags:
- *       - Compare
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: 선택한 비교 기업 ID
- *     responses:
- *       '200':
- *         description: 비교 기업 선택 및 옵션 카운트 완료
+ *       200:
+ *         description: 비교 테이블 insert 및 선택 횟수 테이블 카운트
  */
 router.post(
-  "/mycorpinfo/:id",
+  "/compare/corpinfo/:id",
+  asyncHandler(getCompareandOptionCountController)
+);
+
+/**
+ * @openapi
+ * /compare/mycorpinfo/{id}:
+ *   post:
+ *     summary: 나의 기업 선택 및 옵션 카운트
+ *     tags:
+ *       - Compare
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: 나의 기업 테이블 insert 및 선택 횟수 테이블 카운트
+ */
+router.post(
+  "/compare/mycorpinfo/:id",
   asyncHandler(getMyCompareandOptionCountController)
 );
 
@@ -69,33 +73,11 @@ router.post(
  *     summary: 기업 비교 현황 조회
  *     tags:
  *       - Compare
- *     parameters:
- *       - in: query
- *         name: offset
- *         required: false
- *         schema:
- *           type: integer
- *           default: 0
- *         description: 페이지 시작 오프셋
- *       - in: query
- *         name: limit
- *         required: false
- *         schema:
- *           type: integer
- *           default: 10
- *         description: 한 페이지당 데이터 수
- *       - in: query
- *         name: order
- *         required: false
- *         schema:
- *           type: string
- *           default: investment_desc
- *         description: 정렬 기준
  *     responses:
- *       '200':
- *         description: 기업 비교 데이터 목록 반환
+ *       200:
+ *         description: 기업 비교 데이터 목록
  */
-router.get("/corpinfo", asyncHandler(getCompareController));
+router.get("/compare/corpinfo", asyncHandler(getCompareController));
 
 /**
  * @openapi
@@ -104,30 +86,11 @@ router.get("/corpinfo", asyncHandler(getCompareController));
  *     summary: 나의 기업 비교 현황 조회
  *     tags:
  *       - Compare
- *     parameters:
- *       - in: query
- *         name: offset
- *         required: false
- *         schema:
- *           type: integer
- *           default: 0
- *       - in: query
- *         name: limit
- *         required: false
- *         schema:
- *           type: integer
- *           default: 10
- *       - in: query
- *         name: order
- *         required: false
- *         schema:
- *           type: string
- *           default: investment_desc
  *     responses:
- *       '200':
- *         description: 나의 기업 비교 데이터 목록 반환
+ *       200:
+ *         description: 나의 기업 비교 데이터 목록
  */
-router.get("/mycorpinfo", asyncHandler(getMyCompareController));
+router.get("/compare/mycorpinfo", asyncHandler(getMyCompareController));
 
 // 비교 현황 페이지
 
@@ -141,17 +104,14 @@ router.get("/mycorpinfo", asyncHandler(getMyCompareController));
  *     tags:
  *       - Compare
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: 삭제할 비교 기업 ID
  *     responses:
- *       '200':
- *         description: 기업 비교 데이터 삭제 완료
+ *       200:
+ *         description: 기업 비교 데이터 삭제 처리됨
  */
-router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
+router.delete(
+  "/compare/corpinfo",
+  asyncHandler(deleteCompareCorpController)
+);
 
 /**
  * @openapi
@@ -160,19 +120,172 @@ router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
  *     summary: 나의 기업 비교 데이터 삭제
  *     tags:
  *       - Compare
+ *     responses:
+ *       200:
+ *         description: 나의 기업 비교 데이터 삭제 처리됨
+ */
+router.delete(
+  "/compare/mycorpinfo",
+  asyncHandler(deleteMyCompareCorpController)
+);
+
+
+
+/**
+ * @openapi
+ * /compare/compareadd:
+ *   get:
+ *     summary: 선택된 기업 ID 목록(나의 기업 + 비교 기업)
+ *     description: 현재 사용자에 대해 isDelete=false 인 my_compare_corp 및 compare_corp의 corpId를 평탄화하여 반환합니다.
+ *     tags:
+ *       - Compare
+ *     responses:
+ *       200:
+ *         description: corpId 배열
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ */
+
+router.get(
+  "/compare/compareadd",
+  asyncHandler(getMyCompareAndMyCompareController)
+);
+
+
+/**
+ * @openapi
+ * /compare/comparerank:
+ *   get:
+ *     summary: 선택된 기업 목록에 전역 투자금 랭킹 부착
+ *     description: 선택된 corpId들만 대상으로 기업 정보를 조회하고, 전체 Corp 테이블 기준 투자금 랭킹(investment_rank)을 부착합니다.
+ *     tags:
+ *       - Compare
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *           default: 0
+ *         description: 페이지 오프셋
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 6
+ *         description: 페이지 크기
+ *       - in: query
+ *         name: order
  *         schema:
  *           type: string
- *         description: 삭제할 나의 기업 ID
+ *           enum:
+ *             - investment_desc
+ *             - investment_asc
+ *             - sales_desc
+ *             - sales_asc
+ *             - employee_desc
+ *             - employee_asc
+ *             - investmentHighest
+ *             - investmentLowest
+ *             - salesHighest
+ *             - salesLowest
+ *             - employeeHighest
+ *             - employeeLowest
+ *           default: investment_desc
+ *         description: 정렬 기준 (신/구 포맷 모두 지원)
+ *     responses:
+ *       200:
+ *         description: 선택된 기업 목록(정렬/페이징) + 전역 투자금 랭킹
+ *       500:
+ *         description: 서버 오류
+ */
+router.get(
+  "/compare/comparerank",
+  asyncHandler(getRankingCompareController)
+);
+
+
+/**
+ * @openapi
+ * /compare/compareorder:
+ *   get:
+ *     summary: 비교 대상 기업 목록(정렬만, 랭킹 없음)
+ *     description: getOrderCompare 컨트롤러를 통해 정렬 기준에 맞춘 기업 목록을 반환합니다.
+ *     tags: [Compare]
+ *     parameters:
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *           default: 0
+ *         description: 페이지 오프셋
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 6
+ *         description: 페이지 크기
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [investmentLowest, investmentHighest, salesLowest, salesHighest, employeeLowest, employeeHighest, investment_desc]
+ *           default: investment_desc
+ *         description: >
+ *           정렬 기준. 컨트롤러 기본값은 "investment_desc"이며, 서비스에서 기본 분기(투자액 내림차순)로 처리됩니다.
  *     responses:
  *       '200':
- *         description: 나의 기업 비교 데이터 삭제 완료
+ *         description: 정렬된 비교 대상 기업 배열 (랭킹 없음)
+ *       '500':
+ *         description: 서버 오류
  */
-router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
-
+router.get(
+  "/compare/compareorder",
+  asyncHandler(getOrderCompareController)
+);
+/**
+ * @openapi
+ * /compare/comparetotal:
+ *   get:
+ *     summary: 랭킹 포함 목록과 정렬 목록 동시 조회
+ *     description: getTotalCompare 컨트롤러를 통해 랭킹 결과(compareRank)와 정렬 결과(compareOder)를 함께 반환합니다.
+ *     tags: [Compare]
+ *     parameters:
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *           default: 0
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 6
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [investmentLowest, investmentHighest, salesLowest, salesHighest, employeeLowest, employeeHighest, investment_desc]
+ *           default: investment_desc
+ *     responses:
+ *       '200':
+ *         description: 랭킹 결과와 정렬 결과를 모두 반환합니다.
+ *       '500':
+ *         description: 서버 오류
+ */
+router.get(
+  "/compare/comparetotal",
+  asyncHandler(getTotalCompareController)
+);
 // 이거 아래 안내리면 오류남 그냥 기업 조회 + 기업 선택 등
 /**
  * @openapi
@@ -181,35 +294,11 @@ router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
  *     summary: 전체 비교 기업 목록 조회
  *     tags:
  *       - Compare
- *     parameters:
- *       - in: query
- *         name: offset
- *         required: false
- *         schema:
- *           type: integer
- *           default: 0
- *       - in: query
- *         name: limit
- *         required: false
- *         schema:
- *           type: integer
- *           default: 10
- *       - in: query
- *         name: order
- *         required: false
- *         schema:
- *           type: string
- *           default: investment_desc
- *       - in: query
- *         name: search
- *         required: false
- *         schema:
- *           type: string
  *     responses:
- *       '200':
- *         description: 전체 비교 기업 목록 반환
+ *       200:
+ *         description: 전체 기업 목록 반환
  */
-router.get("/", asyncHandler(listCorpinCompareController));
+router.get("/compare", asyncHandler(listCorpinCompareController));
 
 /**
  * @openapi
@@ -224,11 +313,10 @@ router.get("/", asyncHandler(listCorpinCompareController));
  *         required: true
  *         schema:
  *           type: string
- *         description: 조회할 기업 ID
  *     responses:
- *       '200':
+ *       200:
  *         description: 단일 기업 반환
- *       '404':
+ *       404:
  *         description: 해당 기업을 찾을 수 없음
  */
-router.get("/:id", asyncHandler(getCorpinCompareController));
+router.get("/compare/:id", asyncHandler(getCorpinCompareController));

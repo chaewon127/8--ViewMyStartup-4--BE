@@ -192,6 +192,78 @@ export async function postCompareandOptionCount(corpId){
 
 
 
+export async function getCompareSetCorp({ offset , limit , order, search }){
+  let orderBy;
+  switch(order){
+    case 'investmentLowest':
+      orderBy = { total_investment: "asc" };
+      break;
+    case 'investmentHighest':
+      orderBy = { total_investment: "desc" };
+      break;
+    case 'salesLowest':
+      orderBy = { corp_sales: 'asc'}
+      break;
+    case 'salesHighest':
+      orderBy = { corp_sales: 'desc'}
+      break;
+    case 'employeeLowest':
+      orderBy = { employee: 'asc'}
+      break;
+    case 'employeeHighest':
+      orderBy = { employee: 'desc'}
+      break;
+    default:
+      orderBy = { total_investment: 'desc' }
+  }
+  const myCompare = await prisma.my_compare_corp.findMany({
+    where: {
+      userId: DEFAULT_USER_ID,
+      isDelete: false
+    },
+    select: {
+      corpId: true,
+    },
+  });
+  const corpIds = myCompare.map(c => c.corpId);
+  let where = {
+    id: {
+      notIn: corpIds,
+    }
+  }
+
+  if(search && search.trim()){
+    where = {
+      ...where,
+      OR:[
+        {
+          corp_name: {
+          contains: search.trim(),
+          mode: "insensitive",
+          }
+        },
+        {
+          corp_tag: {
+            contains: search.trim(),
+            mode: "insensitive",
+          }
+        },
+      ],
+    };
+  }
+  //나의 기업 비교 기업 조회시에 확인을 위해 세팅 
+  const compareCorps = await prisma.corp.findMany({
+    where,
+    orderBy: [ orderBy, { created_at: 'desc' }],
+    skip: parseInt(offset),
+    take: parseInt(limit),
+    select:{
+      id: true, 
+      corp_name: true,
+      corp_tag: true,
+    }
+  });
+}
 
 //비교 기업 + 전체 기업 조회 -> 나의 기업에서 선택 버튼 누르면 어차피 
 //비교 기업 테이블에 없으면 생성 있으면 isDelete를 조회해서 세팅함
@@ -225,7 +297,7 @@ export async function getCompare({ offset , limit , order, search } ) {
 //나의 기업 + 전체 기업 조회 -> 나의 기업에서 선택 버튼 누르면 어차피 
 //나의 기업 테이블에 없으면 생성 있으면 isDelete를 조회해서 세팅함
 export async function getMyCompare({ offset , limit , order,search } ) {
-  const corps = await listCorpinCompare({ offset, limit, order,search });
+  const corps = await getCompareSetCorp({ offset, limit, order,search });
   
   const compare = await prisma.my_compare_corp.findMany({
     where: {
