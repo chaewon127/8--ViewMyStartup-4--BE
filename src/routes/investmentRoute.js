@@ -219,7 +219,7 @@ router.patch(
  *         required: true
  *         schema:
  *           type: string
- *         description: 기업 ID
+ *         description: 투자 ID
  *       - in: query
  *         name: password
  *         required: true
