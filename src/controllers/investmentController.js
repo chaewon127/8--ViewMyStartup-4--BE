@@ -24,7 +24,7 @@ const investmentController = {
     const { offset = 0, limit = 5 } = req.query;
     const { id } = req.params;
     const investmentComments = await investmentService.getInvestmentComments({
-      where: { id },
+      where: { corpId: id },
       offset,
       limit,
     });
@@ -72,7 +72,7 @@ const investmentController = {
   //투자자 코멘트 글 삭제
   deleteInvestmentComment: async (req, res) => {
     const { id } = req.params;
-    const { password } = req.body;
+    const { password } = req.body.password;
     await investmentService.deleteInvestmentComment(id, password);
     res.send({ message: "Deleted successfully" });
   },
