@@ -118,7 +118,7 @@ export async function postMyCompareandOptionCount(corpId) {
       },
     },
     update: {
-      isDelete: false,
+      isDeleted: false,
       updated_at: new Date(),
     },
     create: {
@@ -159,7 +159,7 @@ export async function postCompareandOptionCount(corpId) {
       userId_corpId: { userId: DEFAULT_USER_ID, corpId },
     },
     update: {
-      isDelete: false,
+      isDeleted: false,
       userId: DEFAULT_USER_ID,
       corpId: corpId,
       updated_at: new Date(),
@@ -216,7 +216,7 @@ export async function getCompareSetCorp({ offset, limit, order, search }) {
   const myCompare = await prisma.my_compare_corp.findMany({
     where: {
       userId: DEFAULT_USER_ID,
-      isDelete: false,
+      isDeleted: false,
     },
     select: {
       corpId: true,
@@ -274,9 +274,8 @@ export async function getCompare({ offset, limit, order, search }) {
     orderBy: { created_at: "desc" },
     skip: parseInt(offset),
     take: parseInt(limit),
-    select: {
-      corpId: true,
-      Corp: {
+    include: {
+      corp: {
         select: {
           id: true,
           corp_name: true,
@@ -324,10 +323,10 @@ export async function deleteCompareCorp() {
   const compare = await prisma.compare_corp.updateMany({
     where: {
       userId: DEFAULT_USER_ID,
-      isDelete: false,
+      isDeleted: false,
     },
     data: {
-      isDelete: true,
+      isDeleted: true,
       updated_at: new Date(),
     },
   });
@@ -354,10 +353,10 @@ export async function deleteMyCompareCorp() {
   const compare = await prisma.my_compare_corp.updateMany({
     where: {
       userId: DEFAULT_USER_ID,
-      isDelete: false,
+      isDeleted: false,
     },
     data: {
-      isDelete: true,
+      isDeleted: true,
       updated_at: new Date(),
     },
   });
@@ -382,7 +381,7 @@ export async function getMyCompareAndMyCompare() {
     prisma.my_compare_corp.findMany({
       where: {
         userId: DEFAULT_USER_ID,
-        isDelete: false,
+        isDeleted: false,
       },
       select: {
         corpId: true,
@@ -392,7 +391,7 @@ export async function getMyCompareAndMyCompare() {
     prisma.compare_corp.findMany({
       where: {
         userId: DEFAULT_USER_ID,
-        isDelete: false,
+        isDeleted: false,
       },
       select: {
         corpId: true,
