@@ -38,11 +38,12 @@ const investmentController = {
 
   //투자자 코멘트 글 작성
   createInvestmentComment: async (req, res) => {
-    const { name, amount, comment, password, passwordConfirm } = req.body;
+    const { name, amount, amount_comment, password, passwordConfirm } =
+      req.body;
     const investmentComment = await investmentService.createInvestmentComment({
       name,
       amount,
-      comment,
+      amount_comment,
       password,
       passwordConfirm,
     });
