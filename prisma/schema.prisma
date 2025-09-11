@@ -121,7 +121,7 @@ model Investment {
   corpId    String?
 
   name           String
-  password       String?
+  password       String
   amount         Int
   amount_comment String?
 
