@@ -128,7 +128,7 @@ router.get(
  *             required:
  *               - name
  *               - amount
- *               - comment
+ *               - amount_comment
  *               - password
  *               - passwordConfirm
  *             properties:
