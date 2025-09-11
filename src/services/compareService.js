@@ -100,7 +100,7 @@ export async function getCorpinCompare(id) {
       corp_tag: true,
     },
   });
-  return { compareCorp };
+  return compareCorp;
 }
 
 // 나의 기업 생성 및 수정
