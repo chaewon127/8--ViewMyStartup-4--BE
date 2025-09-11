@@ -173,7 +173,7 @@ router.post(
  *         required: true
  *         schema:
  *           type: string
- *         description: 기업 ID
+ *         description: 투자 ID
  *     requestBody:
  *       required: true
  *       content:

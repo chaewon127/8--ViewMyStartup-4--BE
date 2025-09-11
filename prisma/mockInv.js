@@ -52,7 +52,7 @@ import bcrypt from "bcrypt";
 import User from "./mockUser.js";
 import Account from "./mockAccount.js";
 
-const generateMockInvestment = (count = 60) => {
+export const generateMockInvestment = async (count = 60) => {
   const comments = ["코드잇 투자", "초기 투자", "소액 투자", "재투자"];
 
   const investments = [];
@@ -60,7 +60,7 @@ const generateMockInvestment = (count = 60) => {
     const user = User[i % User.length];
     const account = Account[i];
 
-    // const hashedPassword = await bcrypt.hash("1234", 10);
+    const hashedPassword = await bcrypt.hash("1234", 10);
 
     investments.push({
       id: `inv-${i}`,
@@ -68,7 +68,7 @@ const generateMockInvestment = (count = 60) => {
       corpId: `corp-${i + 1}`,
       accountId: account.id,
       name: user.name,
-      password: "1234",
+      password: hashedPassword,
       amount: Math.floor(Math.random() * 50_000_000) + 1_000_000,
       amount_comment: comments[i % comments.length],
       created_at: new Date(),
@@ -77,6 +77,3 @@ const generateMockInvestment = (count = 60) => {
   }
   return investments;
 };
-
-const Investment = generateMockInvestment(60);
-export default Investment;

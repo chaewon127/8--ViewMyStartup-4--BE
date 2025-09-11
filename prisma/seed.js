@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import User from "./mockUser.js";
 import Corp from "./mockCorp.js";
@@ -5,11 +6,13 @@ import Account from "./mockAccount.js";
 import My_compare_corp from "./mockMyCompareCorp.js";
 import Compare_corp from "./mockCompareCorp.js";
 import Option_count from "./mockOptionCount.js";
-import Investment from "./mockInv.js";
+import { generateMockInvestment } from "./mockInv.js";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const Investment = await generateMockInvestment(60);
+
   // 기존 데이터 삭제
   await prisma.investment.deleteMany();
   await prisma.option_count.deleteMany();
@@ -44,10 +47,12 @@ async function main() {
     data: Option_count,
     skipDuplicates: true,
   });
-  await prisma.investment.createMany({
-    data: Investment,
-    skipDuplicates: true,
-  });
+  for (const inv of Investment) {
+    const hashedPassword = await bcrypt.hash(inv.password, 10);
+    await prisma.investment.create({
+      data: { ...inv, password: hashedPassword },
+    });
+  }
 
   console.log("Seeding completed.");
 }
