@@ -120,6 +120,7 @@ model Investment {
   corp      Corp?    @relation(fields: [corpId], references: [id])
   corpId    String?
 
+  name           String
   amount         Int
   amount_comment String?
 
