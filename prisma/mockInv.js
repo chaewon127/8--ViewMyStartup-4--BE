@@ -64,7 +64,7 @@ const generateMockInvestment = (count = 60) => {
       userId: user.id,
       corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
       accountId: account.id,
-      amount: BigInt(Math.floor(Math.random() * 50_000_000) + 1_000_000),
+      amount: Math.floor(Math.random() * 50_000_000) + 1_000_000,
       amount_comment: comments[i % comments.length],
       created_at: new Date(),
       updated_at: new Date(),
