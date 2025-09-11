@@ -201,7 +201,7 @@ router.get("/mycorpinfo", asyncHandler(getMyCompareController));
  *       '200':
  *         description: 기업 비교 데이터 삭제 처리됨
  */
-router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
+router.delete("/corpinfo", asyncHandler(deleteCompareCorpController));
 
 /**
  * @openapi
@@ -214,7 +214,7 @@ router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
  *       '200':
  *         description: 나의 기업 비교 데이터 삭제 처리됨
  */
-router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
+router.delete("/mycorpinfo", asyncHandler(deleteMyCompareCorpController));
 
 /**
  * @swagger
