@@ -85,19 +85,44 @@ export async function listCorp({ offset, limit, order, search }) {
 
 //_sum은 투자값 합산하기 dnlgo tpxld 유틸로 빼서 조회해도 될듯
 export async function updateCropTotalInvestment() {
-  const totals = await prisma.investment.groupBy({
-    by: ["corpId"],
-    _sum: { amount: true },
+  // Investment -> Account -> Corp 관계를 통해 투자 금액을 집계
+  const accounts = await prisma.account.findMany({
+    include: {
+      Investment: true,
+    },
   });
-  // 투자 테이블이 전부 삭제 될수 있으니 초기화 코드 추가
-  if (totals.length === 0) {
+
+  // 기업별 투자 총액 계산
+  const corpTotals = new Map();
+
+  accounts.forEach((account) => {
+    if (account.corpId) {
+      const totalInvestment = account.Investment.reduce((sum, investment) => {
+        return sum + investment.amount;
+      }, 0);
+
+      if (corpTotals.has(account.corpId)) {
+        corpTotals.set(
+          account.corpId,
+          corpTotals.get(account.corpId) + totalInvestment
+        );
+      } else {
+        corpTotals.set(account.corpId, totalInvestment);
+      }
+    }
+  });
+
+  // 투자 테이블이 전부 삭제될 수 있으니 초기화 코드 추가
+  if (corpTotals.size === 0) {
     return prisma.corp.updateMany({ data: { total_investment: BigInt(0) } });
   }
+
+  // 기업별 총 투자금액 업데이트
   await prisma.$transaction(
-    totals.map((cop) =>
+    Array.from(corpTotals.entries()).map(([corpId, total]) =>
       prisma.corp.update({
-        where: { id: cop.corpId },
-        data: { total_investment: BigInt(cop._sum.amount ?? 0) },
+        where: { id: corpId },
+        data: { total_investment: BigInt(total) },
       })
     )
   );
@@ -117,13 +142,14 @@ export async function getCorp(id) {
     where: { id },
   });
 
-  const investments = await prisma.investment.findMany({
+  // Investment -> Account -> Corp 관계를 통해 해당 기업의 투자 정보 조회
+  const accounts = await prisma.account.findMany({
     where: { corpId: id },
-    orderBy: { amount: "desc" },
-    select: {
-      id: true,
-      amount: true,
-      User: {
+    include: {
+      Investment: {
+        orderBy: { amount: "desc" },
+      },
+      user: {
         select: {
           id: true,
           name: true,
@@ -131,5 +157,17 @@ export async function getCorp(id) {
       },
     },
   });
+
+  // 투자 정보를 평면화하여 반환
+  const investments = accounts
+    .flatMap((account) =>
+      account.Investment.map((investment) => ({
+        id: investment.id,
+        amount: investment.amount,
+        User: account.user,
+      }))
+    )
+    .sort((a, b) => b.amount - a.amount);
+
   return { ...corp, investments: investments };
 }

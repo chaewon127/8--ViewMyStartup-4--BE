@@ -26,8 +26,8 @@ const investmentService = {
         // 실제 누적 투자 금액 정렬
         const realInvestments = await prisma.corp.findMany({
           orderBy: { total_investment: orderBy },
-          skip: offset,
-          take: limit,
+          skip: parseInt(offset),
+          take: parseInt(limit),
         });
 
         if (!realInvestments || realInvestments.length === 0) {
@@ -45,8 +45,8 @@ const investmentService = {
   getInvestmentComments: async ({ offset, limit }) => {
     const investmentComments = await prisma.investment.findMany({
       orderBy: { amount: "desc" },
-      skip: offset,
-      take: limit,
+      skip: parseInt(offset),
+      take: parseInt(limit),
       select: {
         Account: true,
       },
