@@ -72,7 +72,7 @@ const investmentController = {
   //투자자 코멘트 글 삭제
   deleteInvestmentComment: async (req, res) => {
     const { id } = req.params;
-    const { password } = req.body.password;
+    const { password } = req.query;
     await investmentService.deleteInvestmentComment(id, password);
     res.send({ message: "Deleted successfully" });
   },
