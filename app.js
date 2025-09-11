@@ -8,6 +8,7 @@ import { router as compareRouter } from "./src/routes/compareRoute.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./src/swagger/swagger.js";
 import cron from "node-cron";
+import morgan from "morgan";
 
 //투자금 등등은 너무 커서 BigInt 로 세팅한거 조회하기 위한 작업
 BigInt.prototype.toJSON = function () {
