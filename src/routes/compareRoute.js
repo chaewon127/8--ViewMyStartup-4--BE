@@ -192,18 +192,11 @@ router.get("/mycorpinfo", asyncHandler(getMyCompareController));
 
 /**
  * @openapi
- * /compare/corpinfo/:
+ * /compare/corpinfo:
  *   delete:
  *     summary: 기업 비교 데이터 삭제
  *     tags:
  *       - Compare
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: 삭제할 비교 기업 ID
  *     responses:
  *       '200':
  *         description: 기업 비교 데이터 삭제 처리됨
@@ -212,18 +205,11 @@ router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
 
 /**
  * @openapi
- * /compare/mycorpinfo/:
+ * /compare/mycorpinfo:
  *   delete:
  *     summary: 나의 기업 비교 데이터 삭제
  *     tags:
  *       - Compare
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: 삭제할 나의 기업 ID
  *     responses:
  *       '200':
  *         description: 나의 기업 비교 데이터 삭제 처리됨
