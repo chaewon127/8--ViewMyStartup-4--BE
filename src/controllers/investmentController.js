@@ -14,7 +14,7 @@ const investmentController = {
       offset: offsetNum,
       limit: limitNum,
       sortBy,
-      order: orderBy,
+      order,
     });
     res.send({ success: true, ...investments });
   },
