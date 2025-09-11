@@ -12,8 +12,8 @@ const investmentService = {
           by: ["corpId"],
           _sum: { amount: true },
           orderBy: { _sum: { amount: order } },
-          skip: parseInt(offset),
-          take: parseInt(limit),
+          skip: offset,
+          take: limit,
         });
 
         if (!virtualInvestments || virtualInvestments.length === 0) {
@@ -26,8 +26,8 @@ const investmentService = {
         // 실제 누적 투자 금액 정렬
         const realInvestments = await prisma.corp.findMany({
           orderBy: { total_investment: orderBy },
-          skip: parseInt(offset),
-          take: parseInt(limit),
+          skip: offset,
+          take: limit,
         });
 
         if (!realInvestments || realInvestments.length === 0) {
@@ -45,8 +45,8 @@ const investmentService = {
   getInvestmentComments: async ({ offset, limit }) => {
     const investmentComments = await prisma.investment.findMany({
       orderBy: { amount: "desc" },
-      skip: parseInt(offset),
-      take: parseInt(limit),
+      skip: offset,
+      take: limit,
       select: {
         Account: true,
       },

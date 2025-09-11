@@ -3,26 +3,16 @@ import investmentService from "../services/investmentService.js";
 const investmentController = {
   //투자 현황 조회
   getInvestments: async (req, res) => {
-    const {
-      offset = 0,
-      limit = 10,
-      sortBy = "virtual",
-      order = "Highest",
-    } = req.query;
-    let orderBy;
-    switch (order) {
-      case "Highest":
-        orderBy = "desc";
-        break;
-      case "Lowest":
-        orderBy = "asc";
-        break;
-      default:
-        orderBy = "desc";
-    }
+    const offsetNum = parseInt(req.query.offset, 10) || 0;
+    const limitNum = parseInt(req.query.limit, 10) || 10;
+    const sortByOptions = ["virtual", "real"];
+    const sortBy = sortByOptions.includes(req.query.sortBy)
+      ? req.query.sortBy
+      : "virtual";
+    const order = req.query.order === "Lowest" ? "asc" : "desc";
     const investments = await investmentService.getInvestments({
-      offset,
-      limit,
+      offset: offsetNum,
+      limit: limitNum,
       sortBy,
       order: orderBy,
     });
