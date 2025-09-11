@@ -56,7 +56,6 @@ const generateMockCompare = (count = 60) => {
       select_count: Math.floor(Math.random() * 50) + 10,
       created_at: new Date(),
       updated_at: new Date(),
-      total: count,
     });
   }
   return arr;

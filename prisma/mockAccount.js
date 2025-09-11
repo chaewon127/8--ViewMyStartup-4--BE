@@ -48,7 +48,6 @@ const generateMockAccounts = (count = 60) => {
       balance: BigInt(Math.floor(Math.random() * 100_000_000) + 1_000_000),
       created_at: new Date(),
       updated_at: new Date(),
-      total: count,
     });
   }
   return accounts;

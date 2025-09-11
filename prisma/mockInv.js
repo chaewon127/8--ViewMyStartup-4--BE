@@ -58,7 +58,6 @@ const generateMockInvestment = (count = 60) => {
       amount: BigInt(Math.floor(Math.random() * 50_000_000) + 1_000_000),
       created_at: new Date(),
       updated_at: new Date(),
-      total: count,
     });
   }
   return investments;

@@ -61,7 +61,6 @@ const generateMockOptionCount = (count = 60) => {
       compare_corp: Math.floor(Math.random() * 50) + 10,
       created_at: new Date(),
       updated_at: new Date(),
-      total: count,
     });
   }
   return arr;

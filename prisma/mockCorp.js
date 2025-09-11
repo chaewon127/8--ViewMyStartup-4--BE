@@ -92,7 +92,6 @@ const generateMockCorps = (count = 60) => {
       employee: Math.floor(Math.random() * 300) + 20,
       created_at: new Date(),
       updated_at: new Date(),
-      total: count,
     });
   }
 
