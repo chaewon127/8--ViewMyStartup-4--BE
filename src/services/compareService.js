@@ -583,9 +583,9 @@ export async function getOrderCompare({ offset, limit, order }) {
   return compareCorps;
 }
 
-export async function getTotalCompare({ offset, limit, order, userId }) {
-  const compareRank = await getRankingCompare({ offset, limit, order, userId });
-  const comapreOrder = await getOrderCompare({ offset, limit, order, userId });
+export async function getTotalCompare({ offset, limit, order }) {
+  const compareRank = await getRankingCompare({ offset, limit, order });
+  const comapreOrder = await getOrderCompare({ offset, limit, order });
 
   return { compareRank, comapreOrder };
 }
