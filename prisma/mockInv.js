@@ -65,7 +65,7 @@ const generateMockInvestment = (count = 60) => {
     investments.push({
       id: `inv-${i}`,
       userId: user.id,
-      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
+      corpId: `corp-${i + 1}`,
       accountId: account.id,
       name: user.name,
       password: "1234",

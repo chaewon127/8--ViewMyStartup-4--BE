@@ -93,7 +93,7 @@ const generateMockCorps = (count = 60) => {
     const tag = corpTags[i % corpTags.length];
     const imageFiles = corpImages[i % corpImages.length];
     corps.push({
-      id: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
+      id: `corp-${i}`,
       corp_name: name,
       corp_tag: tag,
       corp_profile: `코드잇은 ‘온라인 코딩 교육 서비스’를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...`,

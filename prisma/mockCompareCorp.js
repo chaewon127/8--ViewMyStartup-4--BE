@@ -56,7 +56,7 @@ const generateMockCompare = (count = 60) => {
     arr.push({
       id: `cmp-${i}`,
       userId: user.id,
-      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
+      corpId: `corp-${i + 1}`,
       created_at: new Date(),
       updated_at: new Date(),
     });

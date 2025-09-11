@@ -60,7 +60,7 @@ const generateMockOptionCount = (count = 60) => {
     arr.push({
       id: `opt-${i}`,
       userId: user.id,
-      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
+      corpId: `corp-${i + 1}`,
       my_compare_corp: Math.floor(Math.random() * 50) + 10,
       compare_corp: Math.floor(Math.random() * 50) + 10,
       created_at: new Date(),

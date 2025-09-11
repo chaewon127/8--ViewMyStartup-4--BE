@@ -48,7 +48,7 @@ const generateMockAccounts = (count = 60) => {
     accounts.push({
       id: `acc-${String(i).padStart(4, "0")}`,
       userId: user.id,
-      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
+      corpId: `corp-${i + 1}`,
       created_at: new Date(),
       updated_at: new Date(),
     });
