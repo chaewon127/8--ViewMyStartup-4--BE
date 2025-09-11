@@ -39,7 +39,7 @@ export const router = Router();
  *         schema:
  *           type: string
  *           enum: [investmentLowest, investmentHighest, salesLowest, salesHighest, employeeLowest, employeeHighest]
- *           default: investment_desc
+ *           default: investmentHighest
  *         description: 정렬 기준
  *       - in: query
  *         name: search
