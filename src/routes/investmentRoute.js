@@ -61,7 +61,7 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
 
 /**
  * @openapi
- * /investments/corp/{id}:
+ * /corp/{id}:
  *   get:
  *     summary: 특정 기업 투자 댓글 조회
  *     tags:
@@ -107,7 +107,7 @@ router.get(
 
 /**
  * @openapi
- * /investments/corp/{id}:
+ * /corp/{id}:
  *   post:
  *     summary: 특정 기업 투자 댓글 작성
  *     tags:
@@ -162,7 +162,7 @@ router.post(
 
 /**
  * @openapi
- * /investments/corp/{id}:
+ * /corp/{id}:
  *   patch:
  *     summary: 특정 기업 투자 댓글 수정
  *     tags:
@@ -208,7 +208,7 @@ router.patch(
 
 /**
  * @openapi
- * /investments/corp/{id}:
+ * /corp/{id}:
  *   delete:
  *     summary: 특정 기업 투자 댓글 삭제
  *     tags:
