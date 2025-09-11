@@ -26,7 +26,7 @@ export async function listCorpController(req, res, next) {
 //   }
 // }
 
-export async function getCorpController(req, res, next) {
+export async function getCorpController(req, res) {
   const { id } = req.params;
   const corp = await getCorp(id);
   res.send(corp);

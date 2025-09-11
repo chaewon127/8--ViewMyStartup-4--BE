@@ -80,7 +80,7 @@ export async function listCorp({ offset, limit, order, search }) {
     ...c,
     investment_rank: rankMap.get(c.id) ?? null,
   }));
-  return compareCorpWithRanking;
+  return { compareCorpWithRanking, total };
 }
 
 //_sum은 투자값 합산하기 dnlgo tpxld 유틸로 빼서 조회해도 될듯
@@ -123,7 +123,7 @@ export async function getCorp(id) {
     select: {
       id: true,
       amount: true,
-      User: {
+      user: {
         select: {
           id: true,
           name: true,

@@ -48,6 +48,7 @@ export async function listCorpinCompare({ offset, limit, order, search }) {
       ],
     };
   }
+  const total = await prisma.corp.count({ where });
   //나의 기업 비교 기업 조회시에 확인을 위해 세팅
   const compareCorps = await prisma.corp.findMany({
     where,
@@ -82,7 +83,7 @@ export async function listCorpinCompare({ offset, limit, order, search }) {
     ...c,
     investment_rank: rankMap.get(c.id) ?? null,
   }));
-  return compareCorpWithRanking;
+  return { compareCorpWithRanking, total };
 }
 
 //단일 기업 조회 임시 테스트용
@@ -118,13 +119,66 @@ export async function postMyCompareandOptionCount(userId, corpId) {
       updated_at: new Date(),
     },
     create: {
-      userId,
+      userId: userId,
       corpId: corpId,
     },
   });
 
   //횟수 테이블에서 데이터를 보내기 위해
+  return compare;
+}
+
+// 비교 기업 생성 및 수정
+export async function postCompareandOptionCount(userId, corpId) {
+  await getCorpinCompare(corpId);
+
+  // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
+  const compare = await prisma.compare_corp.upsert({
+    where: {
+      userId_corpId: { userId, corpId },
+    },
+    update: {
+      isDeleted: false,
+      userId: userId,
+      corpId: corpId,
+      updated_at: new Date(),
+    },
+    create: {
+      userId: userId,
+      corpId: corpId,
+    },
+  });
+
+  return compare;
+}
+
+export async function postOptionCount(userId, corpId) {
+  await getCorpinCompare(userId, corpId);
+
   const optionCount = await prisma.option_count.upsert({
+    where: {
+      userId_corpId: {
+        userId,
+        corpId,
+      },
+    },
+    update: {
+      compare_corp: { increment: 1 },
+      updated_at: new Date(),
+    },
+    create: {
+      userId,
+      corpId,
+      compare_corp: 1,
+    },
+  });
+  return optionCount;
+}
+
+export async function postMyOptionCount(userId, corpId) {
+  await getCorpinCompare(userId, corpId);
+
+  const optionCountMy = await prisma.option_count.upsert({
     where: {
       userId_corpId: {
         userId,
@@ -141,48 +195,7 @@ export async function postMyCompareandOptionCount(userId, corpId) {
       my_compare_corp: 1,
     },
   });
-
-  return { compare, optionCount };
-}
-
-// 비교 기업 생성 및 수정
-export async function postCompareandOptionCount(userId, corpId) {
-  await getCorpinCompare(corpId);
-
-  // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
-  const compare = await prisma.compare_corp.upsert({
-    where: {
-      userId_corpId: { userId, corpId },
-    },
-    update: {
-      isDeleted: false,
-      userId,
-      corpId: corpId,
-      updated_at: new Date(),
-    },
-    create: {
-      userId,
-      corpId: corpId,
-    },
-  });
-
-  //횟수 테이블에서 데이터를 보내기 위해 increment: 1  -> 1증가
-  const optionCount = await prisma.option_count.upsert({
-    where: {
-      userId_corpId: { userId, corpId },
-    },
-    update: {
-      compare_corp: { increment: 1 },
-      updated_at: new Date(),
-    },
-    create: {
-      userId,
-      corpId,
-      compare_corp: 1,
-    },
-  });
-
-  return { compare, optionCount };
+  return optionCountMy;
 }
 
 export async function getCompareSetCorp({
@@ -274,11 +287,13 @@ export async function getCompare({ offset, limit, order, search, userId }) {
   const compare = await prisma.compare_corp.findMany({
     where: {
       userId,
+      isDelete: false,
     },
     orderBy: { created_at: "desc" },
     skip: parseInt(offset),
     take: parseInt(limit),
-    include: {
+    select: {
+      corpId: true,
       corp: {
         select: {
           id: true,
@@ -312,7 +327,7 @@ export async function getMyCompare({ offset, limit, order, search, userId }) {
     take: parseInt(limit),
     select: {
       corpId: true,
-      Corp: {
+      corp: {
         select: {
           id: true,
           corp_name: true,
@@ -384,6 +399,44 @@ export async function deleteMyCompareCorp(userId) {
   // });
 
   return { compare };
+}
+
+//나의 기업 id 검색해서 지우기
+export async function deleteMyCompareandOptionCount(userId, corpId) {
+  await getCorpinCompare(userId, corpId);
+  // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
+  const compare = await prisma.my_compare_corp.updateMany({
+    where: {
+      userId,
+      corpId,
+      isDelete: false,
+    },
+    data: {
+      isDelete: true,
+      updated_at: new Date(),
+    },
+  });
+  //횟수 테이블에서 데이터를 보내기 위해
+  return compare;
+}
+
+// 비교 기업 id 검색해서 지우기
+export async function deleteCompareandOptionCount(userId, corpId) {
+  await getCorpinCompare(userId, corpId);
+  // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
+  const compare = await prisma.compare_corp.updateMany({
+    where: {
+      userId,
+      corpId,
+      isDelete: false,
+    },
+    data: {
+      isDelete: true,
+      updated_at: new Date(),
+    },
+  });
+  //횟수 테이블에서 데이터를 보내기 위해
+  return compare;
 }
 
 export async function getMyCompareAndMyCompare(userId) {

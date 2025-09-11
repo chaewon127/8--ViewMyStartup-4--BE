@@ -44,6 +44,18 @@ export async function getMyCompareandOptionCountController(req, res) {
   res.send(compare);
 }
 
+export async function postOptionCountController(req, res) {
+  const { id } = req.params;
+  const compare = await postOptionCount(id);
+  res.send(compare);
+}
+
+export async function postMyOptionCountController(req, res) {
+  const { id } = req.params;
+  const compare = await postMyOptionCount(id);
+  res.send(compare);
+}
+
 export async function getCompareController(req, res) {
   const { offset = 0, limit = 10, order = "investment_desc" } = req.query;
   const data = { offset, limit, order };
@@ -66,6 +78,18 @@ export async function deleteCompareCorpController(req, res) {
 export async function deleteMyCompareCorpController(req, res) {
   const compare = await deleteMyCompareCorp();
   res.send(compare);
+}
+
+export async function deleteMyCompareandOptionCountController(req, res, next) {
+  const { id } = req.params;
+  const compare = await deleteMyCompareandOptionCount(id);
+  return res.send(compare);
+}
+
+export async function deleteCompareandOptionCountController(req, res, next) {
+  const { id } = req.params;
+  const compare = await deleteCompareandOptionCount(id);
+  return res.send(compare);
 }
 
 export async function getMyCompareAndMyCompareController(req, res) {
