@@ -72,6 +72,7 @@ const investmentService = {
           corp_name: true,
           corp_tag: true,
           corp_profile: true,
+          corp_image: true,
           total_investment: true,
         },
       });

@@ -46,6 +46,7 @@ model Corp {
   corp_name        String
   corp_tag         String
   corp_profile     String
+  corp_image       String
   total_investment BigInt   @default(0)
   corp_sales       BigInt   @default(0)
   employee         Int

@@ -72,17 +72,32 @@ const generateMockCorps = (count = 60) => {
     "브레인업",
   ];
   const corpTags = ["에듀테크"];
+  const corpImages = [
+    "aircode.svg",
+    "bluecord.svg",
+    "ccode.svg",
+    "codeit.svg",
+    "codestates.svg",
+    "elice.svg",
+    "mespresso.svg",
+    "mildang.svg",
+    "ncode.svg",
+    "riiid.svg",
+    "sparta.svg",
+  ];
 
   const corps = [];
 
   for (let i = 1; i <= count; i++) {
     const name = corpNames[i % corpNames.length] + ` ${i}`;
     const tag = corpTags[i % corpTags.length];
+    const imageFiles = corpImages[i % corpImages.length];
     corps.push({
       id: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
       corp_name: name,
       corp_tag: tag,
       corp_profile: `코드잇은 ‘온라인 코딩 교육 서비스’를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...`,
+      corp_image: `images/${imageFiles}`,
       total_investment: BigInt(
         Math.floor(Math.random() * 500_000_000) + 100_000_000
       ),

@@ -195,7 +195,7 @@ router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
  */
 
 router.get(
-  "/compare/compareadd",
+  "/compare/comparead",
   asyncHandler(getMyCompareAndMyCompareController)
 );
 
