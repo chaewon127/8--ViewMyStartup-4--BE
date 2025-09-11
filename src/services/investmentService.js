@@ -6,15 +6,12 @@ const investmentService = {
   /* 투자 현황 조회 페이지 */
   getInvestments: async ({ offset, limit, sortBy, order }) => {
     if (sortBy === "virtual") {
-      // 가상 투자 금액 합산 후 정렬, 합산은 DB에서 SUM 쿼리로 실행
-      const virtualInvestments = await prisma.corp.findMany({
+      //Corp, Investment 데이터 가져오기
+      const corps = await prisma.corp.findMany({
         skip: offset,
         take: limit,
-        orderBy: {
-          // 서브쿼리 합계 기준 정렬
-          Investment: {
-            _sum: { amount: order },
-          },
+        include: {
+          Investment: { select: { amount: true } },
         },
         select: {
           id: true,
@@ -22,16 +19,12 @@ const investmentService = {
           corp_tag: true,
           corp_profile: true,
           total_investment: true,
-          Investment: {
-            select: { amount: true },
-          },
         },
       });
 
       //가상 투자 금액 정렬과 실제 누적 투자 금액 정렬 결과 합치기
-      const merged = virtualInvestments.map((corp) => {
+      const merged = corps.map((corp) => {
         const virtualSum = corp.Investment.reduce(
-          //reduce로 배열 순회하며 누적 계산
           (acc, inv) => acc + inv.amount,
           0
         );
@@ -55,8 +48,15 @@ const investmentService = {
       },
       */
 
+      // merge한 대로 정렬
+      merged.sort((a, b) =>
+        order === "desc"
+          ? b.virtual_investment - a.virtual_investment
+          : a.virtual_investment - b.virtual_investment
+      );
+
       const total = await prisma.corp.count({
-        where: { Investment: { some: {} } }, // 투자 기록이 있는 기업 수, total
+        where: { Investment: { some: {} } },
       });
 
       return { data: merged, total };
