@@ -88,7 +88,7 @@ const investmentService = {
   /* 투자자 코멘트 리스트 조회 */
   getInvestmentComments: async ({ offset, limit }) => {
     const investmentComments = await prisma.investment.findMany({
-      where: { corpId: id },
+      where: { corpId },
       orderBy: { amount: "desc" },
       skip: parseInt(offset),
       take: parseInt(limit),
