@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { asyncHandler } from "../middlewares/asyncHandler.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 import {
   listCorpinCompareController,
   getCorpinCompareController,

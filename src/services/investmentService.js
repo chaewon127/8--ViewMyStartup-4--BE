@@ -31,6 +31,7 @@ const investmentService = {
       //가상 투자 금액 정렬과 실제 누적 투자 금액 정렬 결과 합치기
       const merged = virtualInvestments.map((corp) => {
         const virtualSum = corp.Investment.reduce(
+          //reduce로 배열 순회하며 누적 계산
           (acc, inv) => acc + inv.amount,
           0
         );
