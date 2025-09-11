@@ -24,6 +24,7 @@ const investmentController = {
     const { offset = 0, limit = 5 } = req.query;
     const { id } = req.params;
     const investmentComments = await investmentService.getInvestmentComments({
+      where: { id },
       offset,
       limit,
     });
