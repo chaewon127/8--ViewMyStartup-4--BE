@@ -100,7 +100,7 @@ export async function getCorpinCompare(id) {
 }
 
 // 나의 기업 생성 및 수정
-export async function postMyCompareandOptionCount(corpId) {
+export async function postMyCompareandOptionCount(userId, corpId) {
   await deleteMyCompareCorp();
   await deleteCompareCorp();
   await getCorpinCompare(corpId);
@@ -146,7 +146,7 @@ export async function postMyCompareandOptionCount(corpId) {
 }
 
 // 비교 기업 생성 및 수정
-export async function postCompareandOptionCount(corpId) {
+export async function postCompareandOptionCount(userId, corpId) {
   await getCorpinCompare(corpId);
 
   // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
@@ -185,7 +185,13 @@ export async function postCompareandOptionCount(corpId) {
   return { compare, optionCount };
 }
 
-export async function getCompareSetCorp({ offset, limit, order, search }) {
+export async function getCompareSetCorp({
+  offset,
+  limit,
+  order,
+  search,
+  userId,
+}) {
   let orderBy;
   switch (order) {
     case "investmentLowest":
@@ -256,11 +262,13 @@ export async function getCompareSetCorp({ offset, limit, order, search }) {
       corp_tag: true,
     },
   });
+
+  return compareCorps;
 }
 
 //비교 기업 + 전체 기업 조회 -> 나의 기업에서 선택 버튼 누르면 어차피
 //비교 기업 테이블에 없으면 생성 있으면 isDelete를 조회해서 세팅함
-export async function getCompare({ offset, limit, order, search }) {
+export async function getCompare({ offset, limit, order, search, userId }) {
   const corps = await listCorpinCompare({ offset, limit, order, search });
 
   const compare = await prisma.compare_corp.findMany({
@@ -286,8 +294,14 @@ export async function getCompare({ offset, limit, order, search }) {
 
 //나의 기업 + 전체 기업 조회 -> 나의 기업에서 선택 버튼 누르면 어차피
 //나의 기업 테이블에 없으면 생성 있으면 isDelete를 조회해서 세팅함
-export async function getMyCompare({ offset, limit, order, search }) {
-  const corps = await getCompareSetCorp({ offset, limit, order, search });
+export async function getMyCompare({ offset, limit, order, search, userId }) {
+  const corps = await getCompareSetCorp({
+    offset,
+    limit,
+    order,
+    search,
+    userId,
+  });
 
   const compare = await prisma.my_compare_corp.findMany({
     where: {
@@ -313,7 +327,7 @@ export async function getMyCompare({ offset, limit, order, search }) {
 
 //gt는 0인지 확인용 decrement는 1 감소
 //비교기업 삭제
-export async function deleteCompareCorp() {
+export async function deleteCompareCorp(userId) {
   // await getCorpinCompare(corpId)
 
   const compare = await prisma.compare_corp.updateMany({
@@ -343,7 +357,7 @@ export async function deleteCompareCorp() {
 }
 
 // 나의 기업 태그에서 삭제 시에
-export async function deleteMyCompareCorp() {
+export async function deleteMyCompareCorp(userId) {
   // await getCorpinCompare(corpId)
 
   const compare = await prisma.my_compare_corp.updateMany({
@@ -372,7 +386,7 @@ export async function deleteMyCompareCorp() {
   return { compare };
 }
 
-export async function getMyCompareAndMyCompare() {
+export async function getMyCompareAndMyCompare(userId) {
   const [compare, myCompare] = await Promise.all([
     prisma.my_compare_corp.findMany({
       where: {
@@ -428,7 +442,7 @@ export async function getRankingCompare({ offset, limit, order }) {
       orderBy = { total_investment: "desc" };
   }
 
-  const corpId = await getMyCompareAndMyCompare();
+  const corpId = await getMyCompareAndMyCompare(userId);
   if (!corpId.length) return [];
 
   const compareCorps = await prisma.corp.findMany({
@@ -514,9 +528,9 @@ export async function getOrderCompare({ offset, limit, order }) {
   return compareCorps;
 }
 
-export async function getTotalCompare({ offset, limit, order }) {
-  const compareRank = await getRankingCompare({ offset, limit, order });
-  const comapreOrder = await getOrderCompare({ offset, limit, order });
+export async function getTotalCompare({ offset, limit, order, userId }) {
+  const compareRank = await getRankingCompare({ offset, limit, order, userId });
+  const comapreOrder = await getOrderCompare({ offset, limit, order, userId });
 
   return { compareRank, comapreOrder };
 }
