@@ -192,7 +192,7 @@ router.get("/mycorpinfo", asyncHandler(getMyCompareController));
 
 /**
  * @openapi
- * /compare/corpinfo/{id}:
+ * /compare/corpinfo/:
  *   delete:
  *     summary: 기업 비교 데이터 삭제
  *     tags:
@@ -212,7 +212,7 @@ router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
 
 /**
  * @openapi
- * /compare/mycorpinfo/{id}:
+ * /compare/mycorpinfo/:
  *   delete:
  *     summary: 나의 기업 비교 데이터 삭제
  *     tags:
