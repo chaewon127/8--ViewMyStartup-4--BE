@@ -4,6 +4,8 @@ import {
   getCorpinCompare,
   postCompareandOptionCount,
   postMyCompareandOptionCount,
+  postMyOptionCount,
+  postOptionCount,
   getCompare,
   getMyCompare,
   deleteCompareCorp,
@@ -12,6 +14,8 @@ import {
   getRankingCompare,
   getOrderCompare,
   getTotalCompare,
+  deleteMyCompareandOptionCount,
+  deleteCompareandOptionCount,
 } from "../services/compareService.js";
 
 export async function listCorpinCompareController(req, res) {
@@ -57,15 +61,25 @@ export async function postMyOptionCountController(req, res) {
 }
 
 export async function getCompareController(req, res) {
-  const { offset = 0, limit = 10, order = "investment_desc" } = req.query;
-  const data = { offset, limit, order };
+  const {
+    offset = 0,
+    limit = 10,
+    order = "investment_desc",
+    search,
+  } = req.query;
+  const data = { offset, limit, order, search };
   const compareAndCorps = await getCompare(data);
   res.send(compareAndCorps);
 }
 
 export async function getMyCompareController(req, res) {
-  const { offset = 0, limit = 10, order = "investment_desc" } = req.query;
-  const data = { offset, limit, order };
+  const {
+    offset = 0,
+    limit = 10,
+    order = "investment_desc",
+    search,
+  } = req.query;
+  const data = { offset, limit, order, search };
   const compareAndCorps = await getMyCompare(data);
   res.send(compareAndCorps);
 }

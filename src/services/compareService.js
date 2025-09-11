@@ -318,7 +318,6 @@ export async function getMyCompare({ offset, limit, order, search }) {
     limit,
     order,
     search,
-    userId,
   });
 
   const compare = await prisma.my_compare_corp.findMany({
