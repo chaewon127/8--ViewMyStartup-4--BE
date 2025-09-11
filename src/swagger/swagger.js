@@ -51,6 +51,7 @@ const options = {
             corp_name: { type: "string" },
             corp_tag: { type: "string" },
             corp_profile: { type: "string" },
+            corp_image: { type: "string" },
             total_investment: { type: "integer", format: "int64", default: 0 },
             corp_sales: { type: "integer", format: "int64", default: 0 },
             employee: { type: "integer" },
@@ -97,6 +98,10 @@ const options = {
           properties: {
             id: { type: "string", format: "uuid" },
             accountId: { type: "string", format: "uuid" },
+            userId: { type: "string", format: "uuid", nullable: true },
+            corpId: { type: "string", format: "uuid", nullable: true },
+            name: { type: "string" },
+            password: { type: "string" },
             amount: { type: "integer" },
             amount_comment: { type: "string" },
             created_at: { type: "string", format: "date-time" },
