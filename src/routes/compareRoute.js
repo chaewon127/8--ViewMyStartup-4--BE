@@ -67,7 +67,7 @@ router.post(
 );
 
 /**
- * @openapi
+ * @swagger
  * /compare/optioncount/{id}:
  *   post:
  *     summary: 비교 기업 선택 수 증가
@@ -91,7 +91,7 @@ router.post(
 router.post("/optioncount/:id", asyncHandler(postOptionCountController));
 
 /**
- * @openapi
+ * @swagger
  * /compare/myoptioncount/{id}:
  *   post:
  *     summary: 나의 기업 선택 수 증가
@@ -229,7 +229,7 @@ router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
 router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
 
 /**
- * @openapi
+ * @swagger
  * /compare/corpinfo/{id}:
  *   delete:
  *     summary: 비교 기업 선택 해제(soft delete)
@@ -256,7 +256,7 @@ router.delete(
 );
 
 /**
- * @openapi
+ * @swagger
  * /compare/mycorpinfo/{id}:
  *   delete:
  *     summary: 나의 기업 선택 해제(soft delete)

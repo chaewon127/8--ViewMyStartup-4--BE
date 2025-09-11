@@ -18,7 +18,7 @@ export async function listCorpinCompareController(req, res) {
   const {
     offset = 0,
     limit = 10,
-    order = "investment_desc",
+    order = "investmentHighest",
     search,
   } = req.query;
   const data = { offset, limit, order, search };

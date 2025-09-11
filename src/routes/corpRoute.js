@@ -53,9 +53,14 @@ export const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Corp'
+ *               type: object
+ *               properties:
+ *                 compareCorpWithRanking:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Corp'
+ *                 total:
+ *                   type: integer
  */
 router.get("/", asyncHandler(listCorpController));
 
@@ -102,7 +107,7 @@ router.get("/", asyncHandler(listCorpController));
  *                         type: string
  *                       amount:
  *                         type: number
- *                       User:
+ *                       user:
  *                         type: object
  *                         properties:
  *                           id:

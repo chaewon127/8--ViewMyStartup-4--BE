@@ -287,7 +287,7 @@ export async function getCompare({ offset, limit, order, search, userId }) {
   const compare = await prisma.compare_corp.findMany({
     where: {
       userId,
-      isDelete: false,
+      isDeleted: false,
     },
     orderBy: { created_at: "desc" },
     skip: parseInt(offset),
@@ -409,10 +409,10 @@ export async function deleteMyCompareandOptionCount(userId, corpId) {
     where: {
       userId,
       corpId,
-      isDelete: false,
+      isDeleted: false,
     },
     data: {
-      isDelete: true,
+      isDeleted: true,
       updated_at: new Date(),
     },
   });
@@ -428,10 +428,10 @@ export async function deleteCompareandOptionCount(userId, corpId) {
     where: {
       userId,
       corpId,
-      isDelete: false,
+      isDeleted: false,
     },
     data: {
-      isDelete: true,
+      isDeleted: true,
       updated_at: new Date(),
     },
   });
