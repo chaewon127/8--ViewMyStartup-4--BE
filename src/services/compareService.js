@@ -497,7 +497,7 @@ export async function getRankingCompare({ offset, limit, order }) {
       orderBy = { total_investment: "desc" };
   }
 
-  const corpId = await getMyCompareAndMyCompare(userId);
+  const corpId = await getMyCompareAndMyCompare();
   if (!corpId.length) return [];
 
   const compareCorps = await prisma.corp.findMany({
