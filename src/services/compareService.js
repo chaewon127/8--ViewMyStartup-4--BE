@@ -32,6 +32,7 @@ export async function listCorpinCompare({offset, limit, order,search}){
     default:
       orderBy = { total_investment: 'desc' }
   }
+  
   let where;
   if(search && search.trim()){
     where = {
@@ -51,8 +52,6 @@ export async function listCorpinCompare({offset, limit, order,search}){
       ],
     };
   }
-
-
   //나의 기업 비교 기업 조회시에 확인을 위해 세팅 
   const compareCorps = await prisma.corp.findMany({
     where,
@@ -65,9 +64,30 @@ export async function listCorpinCompare({offset, limit, order,search}){
       corp_tag: true,
     }
   });
-  return compareCorps;
-}
+    //랭킹 
+  const rankingCorp = await prisma.corp.findMany({
+    where,
+    select:{
+      id:true,
+    },
+    orderBy: [
+      { total_investment: 'desc' },
+      { created_at: 'asc' },
+      { id: 'asc' },
+    ],
+  });
 
+  const rankMap = new Map();
+  rankingCorp.forEach((row, idx) => {
+    rankMap.set(row.id, idx + 1);
+  });
+
+  const compareCorpWithRanking = compareCorps.map((c) => ({
+    ...c,
+    investment_rank: rankMap.get(c.id) ?? null,
+  }))
+  return compareCorpWithRanking;
+}
 
 //단일 기업 조회 임시 테스트용
 export async function getCorpinCompare(id){
@@ -83,11 +103,10 @@ export async function getCorpinCompare(id){
   return compareCorp;
 }
 
-
-
 // 나의 기업 생성 및 수정
 export async function postMyCompareandOptionCount(corpId){
-
+  await deleteMyCompareCorp();
+  await deleteCompareCorp();
   await getCorpinCompare(corpId);
 
   // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅 
@@ -206,13 +225,11 @@ export async function getCompare({ offset , limit , order, search } ) {
 //나의 기업 + 전체 기업 조회 -> 나의 기업에서 선택 버튼 누르면 어차피 
 //나의 기업 테이블에 없으면 생성 있으면 isDelete를 조회해서 세팅함
 export async function getMyCompare({ offset , limit , order,search } ) {
-
   const corps = await listCorpinCompare({ offset, limit, order,search });
   
   const compare = await prisma.my_compare_corp.findMany({
     where: {
       userId: DEFAULT_USER_ID,
-      isDelete: false,
     },
     orderBy: { created_at: 'desc' },
     skip: parseInt(offset),
@@ -228,22 +245,19 @@ export async function getMyCompare({ offset , limit , order,search } ) {
       },
     },
   });
-  
+
   return { compare, corps };
 }
 
-
-
 //gt는 0인지 확인용 decrement는 1 감소 
 //비교기업 삭제
-export async function deleteCompareCorp(corpId){
+export async function deleteCompareCorp(){
 
-  await getCorpinCompare(corpId)
+  // await getCorpinCompare(corpId)
 
   const compare = await prisma.compare_corp.updateMany({
     where: {
       userId:DEFAULT_USER_ID,
-      corpId,
       isDelete: false,
     },
     data: {
@@ -252,32 +266,31 @@ export async function deleteCompareCorp(corpId){
     },
   });
 
-  const optionCount = await prisma.option_count.updateMany({
-    where: { 
-      userId: DEFAULT_USER_ID, 
-      corpId,
-      compare_corp: { gt:0 }
-    },
-    data: {
-      compare_corp: { decrement: 1 },
-      updated_at: new Date()
-    },
-  });
+  // const optionCount = await prisma.option_count.updateMany({
+  //   where: { 
+  //     userId: DEFAULT_USER_ID, 
+  //     corpId,
+  //     compare_corp: { gt:0 }
+  //   },
+  //   data: {
+  //     compare_corp: { decrement: 1 },
+  //     updated_at: new Date()
+  //   },
+  // });
 
-  return {compare, optionCount};
+  return {compare};
 }
 
 
 
 // 나의 기업 태그에서 삭제 시에 
-export async function deleteMyCompareCorp(corpId){
+export async function deleteMyCompareCorp(){
 
-  await getCorpinCompare(corpId)
+// await getCorpinCompare(corpId)
 
   const compare = await prisma.my_compare_corp.updateMany({
     where: {
       userId:DEFAULT_USER_ID,
-      corpId,
       isDelete: false,
     },
     data: {
@@ -286,18 +299,171 @@ export async function deleteMyCompareCorp(corpId){
     },
   });
 
-  const optionCount = await prisma.option_count.updateMany({
-    where: { 
-      userId: DEFAULT_USER_ID, 
-      corpId,
-      my_compare_corp: { gt:0 }
-    },
-    data: {
-      my_compare_corp: { decrement: 1 },
-      updated_at: new Date()
+  // const optionCount = await prisma.option_count.updateMany({
+  //   where: { 
+  //     userId: DEFAULT_USER_ID, 
+  //     corpId,
+  //     my_compare_corp: { gt:0 }
+  //   },
+  //   data: {
+  //     my_compare_corp: { decrement: 1 },
+  //     updated_at: new Date()
+  //   },
+  // });
+
+  return {compare};
+}
+
+
+export async function getMyCompareAndMyCompare() {
+  const [compare, myCompare] = await Promise.all([
+    prisma.my_compare_corp.findMany({
+      where: {
+        userId:DEFAULT_USER_ID,
+        isDelete:false,
+      },
+      select:{
+        corpId:true
+      },
+    }),
+
+    prisma.compare_corp.findMany({
+      where: {
+        userId:DEFAULT_USER_ID,
+        isDelete:false,
+      },
+      select:{
+        corpId:true
+      },
+      }),
+  ]);
+
+  const myCompareId = myCompare.map(r=> r.corpId).filter(Boolean);
+  const compareId = compare.map(r=> r.corpId).filter(Boolean);
+
+  const corpId = myCompareId.concat(compareId);
+
+  return corpId;
+}
+
+export async function getRankingCompare({offset, limit, order}){
+  let orderBy;
+  switch(order){
+    case 'investmentLowest':
+      orderBy = { total_investment: "asc" };
+      break;
+    case 'investmentHighest':
+      orderBy = { total_investment: "desc" };
+      break;
+    case 'salesLowest':
+      orderBy = { corp_sales: 'asc'}
+      break;
+    case 'salesHighest':
+      orderBy = { corp_sales: 'desc'}
+      break;
+    case 'employeeLowest':
+      orderBy = { employee: 'asc'}
+      break;
+    case 'employeeHighest':
+      orderBy = { employee: 'desc'}
+      break;
+    default:
+      orderBy = { total_investment: 'desc' }
+  }
+
+  const corpId = await getMyCompareAndMyCompare();
+  if(!corpId.length) 
+    return [];
+
+  const compareCorps = await prisma.corp.findMany({
+    where: { id: { in: corpId } },
+    orderBy: [orderBy, { created_at: 'desc' }],
+    skip: parseInt(offset),
+    take: parseInt(limit),
+    select: {
+      id: true, 
+      corp_name:true, 
+      corp_tag:true,
+      total_investment: true,
+      corp_sales: true,
+      employee: true,
     },
   });
 
-  return {compare, optionCount};
+  const rankingCorp = await prisma.corp.findMany({
+    select:{
+      id:true,
+    },
+    orderBy: [
+      { total_investment: 'desc' },
+      { created_at: 'asc' },
+      { id: 'asc' },
+    ],
+  });
+
+  const rankMap = new Map();
+  rankingCorp.forEach((row, idx) => {
+    rankMap.set(row.id, idx + 1);
+  });
+
+
+  return compareCorps.map((c) => ({
+    ...c, 
+    investment_rank: rankMap.get(c.id) ?? null,
+  }));
 }
 
+
+export async function getOrderCompare({offset, limit, order}){
+  let orderBy;
+  switch(order){
+    case 'investmentLowest':
+      orderBy = { total_investment: "asc" };
+      break;
+    case 'investmentHighest':
+      orderBy = { total_investment: "desc" };
+      break;
+    case 'salesLowest':
+      orderBy = { corp_sales: 'asc'}
+      break;
+    case 'salesHighest':
+      orderBy = { corp_sales: 'desc'}
+      break;
+    case 'employeeLowest':
+      orderBy = { employee: 'asc'}
+      break;
+    case 'employeeHighest':
+      orderBy = { employee: 'desc'}
+      break;
+    default:
+      orderBy = { total_investment: 'desc' }
+  }
+
+  const corpId = await getMyCompareAndMyCompare();
+  if(!corpId.length) 
+    return [];
+
+  const compareCorps = await prisma.corp.findMany({
+    where: { id: { in: corpId } },
+    orderBy: [orderBy, { created_at: 'desc' }],
+    skip: parseInt(offset),
+    take: parseInt(limit),
+    select: {
+      id: true, 
+      corp_name:true, 
+      corp_tag:true,
+      total_investment: true,
+      corp_sales: true,
+      employee: true,
+    },
+  });
+
+  return compareCorps;
+}
+
+export async function getTotalCompare({offset, limit, order}){
+  const compareRank = await getRankingCompare({offset, limit, order});
+  const comapreOrder = await getOrderCompare({offset, limit, order});
+
+  return {compareRank, comapreOrder}
+}

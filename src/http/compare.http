@@ -5,12 +5,11 @@
 ############################################################
 
 ///비교 할때 조회 되는 테이블 + 다른 테이블에 조회할 전체 리스트 생성용
-GET http://localhost:3000/compare
-
+GET http://localhost:3000/compare?limit=10&offset=0&order=employeeHighest
+####
 //위랑 같은데 단일 id 
 
-GET http://localhost:3000/compare/da9257f3-4873-4f30-ac8d-c7069d51db13
-
+GET http://localhost:3000/compare/0ec95c80-0ce6-42b7-b2e6-5c98e7187967
 
 
 
@@ -41,12 +40,11 @@ GET http://localhost:3000/compare/mycorpinfo
 //// 이 아래부터 실제 기능
 ###
 //비교 기업 추가
-POST http://localhost:3000/compare/corpinfo/6cec4338-bb7a-4bb5-9086-c80595b6ce71
+POST http://localhost:3000/compare/corpinfo/879f18ff-1840-4078-804d-9f4098745943
 
 ###
 // 나의 기업 추가
 POST http://localhost:3000/compare/mycorpinfo/6cec4338-bb7a-4bb5-9086-c80595b6ce71
-
 ### 
 
 ###
@@ -55,18 +53,42 @@ POST http://localhost:3000/compare/mycorpinfo/6cec4338-bb7a-4bb5-9086-c80595b6ce
 // 나의 기업, 비교 기업 세팅 아래 추가하겠음
 
 // 비교 기업 
-DELETE http://localhost:3000/compare/corpinfo/dae06a85-ab83-46b7-a3a7-8adfef1a6fd5
-
+DELETE http://localhost:3000/compare/corpinfo
 ###
 // 나의 기업 
-DELETE http://localhost:3000/compare/mycorpinfo/dae06a85-ab83-46b7-a3a7-8adfef1a6fd5
+DELETE http://localhost:3000/compare/mycorpinfo
 
 
 ###
-
 // 비교 현황 -> 나의 기업 선택 횟수 + 비교 기업 선택 횟수
 GET http://localhost:3000/corpTotals
+
 
 ###
 // order => myCompareLowest, myCompareHighest,compareHighest,compareLowest
 GET http://localhost:3000/corpTotals?limit=10&offset=0&order=compareHighest
+
+
+
+
+
+
+
+###
+//나의 기업과 비교 기업에서 id값만 추출한 결과물 
+
+
+GET http://localhost:3000/compare/compareadd
+
+
+###
+// 기업 비교 현황  랭킹 추가해서 조회 
+GET http://localhost:3000/compare/comparerank
+
+###
+// 기업 비교 현황 랭킹없이 조회
+GET http://localhost:3000/compare/compareorder
+
+###
+// 기업 비교 현황 그냥 합산해서 조회 
+GET http://localhost:3000/compare/comparetotal
