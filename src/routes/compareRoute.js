@@ -5,6 +5,8 @@ import {
   getCorpinCompareController,
   getCompareandOptionCountController,
   getMyCompareandOptionCountController,
+  postOptionCountController,
+  postMyOptionCountController,
   getCompareController,
   getMyCompareController,
   deleteCompareCorpController,
@@ -13,6 +15,8 @@ import {
   getRankingCompareController,
   getOrderCompareController,
   getTotalCompareController,
+  deleteMyCompareandOptionCountController,
+  deleteCompareandOptionCountController,
 } from "../controllers/compareController.js";
 import { roundToNearestHours } from "date-fns";
 
@@ -42,7 +46,7 @@ router.post("/corpinfo/:id", asyncHandler(getCompareandOptionCountController));
 
 /**
  * @openapi
- * /compare/corpinfo/{id}:
+ * /compare/mycorpinfo/{id}:
  *   post:
  *     summary: 비교 기업 선택 및 옵션 카운트
  *     tags:
@@ -62,8 +66,57 @@ router.post(
   asyncHandler(getMyCompareandOptionCountController)
 );
 
+/**
+ * @openapi
+ * /compare/optioncount/{id}:
+ *   post:
+ *     summary: 비교 기업 선택 수 증가
+ *     description: corpId에 해당하는 레코드의 compare_corp 값을 1 증가시킵니다. 존재하지 않으면 새로 생성합니다.
+ *     tags: [Compare]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 기업 ID (corpId)
+ *     responses:
+ *       200:
+ *         description: upsert 결과
+ *       404:
+ *         description: 기업을 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.post("/optioncount/:id", asyncHandler(postOptionCountController));
+
+/**
+ * @openapi
+ * /compare/myoptioncount/{id}:
+ *   post:
+ *     summary: 나의 기업 선택 수 증가
+ *     description: corpId에 해당하는 레코드의 my_compare_corp 값을 1 증가시킵니다. 존재하지 않으면 새로 생성합니다.
+ *     tags: [Compare]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 기업 ID (corpId)
+ *     responses:
+ *       200:
+ *         description: upsert 결과
+ *       404:
+ *         description: 기업을 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.post("/myoptioncount/:id", asyncHandler(postMyOptionCountController));
+
 // 비교, 나의 기업 조회 시 세팅 (전체 기업 orederBy 그대로 사용 가능 + 나의 기업은)
 // 전에 사용한 거 그대로 사용 가능
+
 /**
  * @openapi
  * /compare/corpinfo:
@@ -174,6 +227,60 @@ router.delete("/corpinfo/:id", asyncHandler(deleteCompareCorpController));
  *         description: 나의 기업 비교 데이터 삭제 처리됨
  */
 router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
+
+/**
+ * @openapi
+ * /compare/corpinfo/{id}:
+ *   delete:
+ *     summary: 비교 기업 선택 해제(soft delete)
+ *     description: 주어진 corpId에 대해 compare_corp 레코드를 isDelete=true로 업데이트합니다.
+ *     tags: [Compare]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 기업 ID (corpId)
+ *     responses:
+ *       200:
+ *         description: 업데이트 결과(영향받은 행 수 등)
+ *       404:
+ *         description: 대상 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.delete(
+  "/corpinfo/:id",
+  asyncHandler(deleteCompareandOptionCountController)
+);
+
+/**
+ * @openapi
+ * /compare/mycorpinfo/{id}:
+ *   delete:
+ *     summary: 나의 기업 선택 해제(soft delete)
+ *     description: 주어진 corpId에 대해 my_compare_corp 레코드를 isDelete=true로 업데이트합니다.
+ *     tags: [Compare]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 기업 ID (corpId)
+ *     responses:
+ *       200:
+ *         description: 업데이트 결과(영향받은 행 수 등)
+ *       404:
+ *         description: 대상 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.delete(
+  "/mycorpinfo/:id",
+  asyncHandler(deleteMyCompareandOptionCountController)
+);
 
 /**
  * @openapi
