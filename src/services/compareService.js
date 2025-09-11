@@ -2,6 +2,8 @@ import { compare } from "bcrypt";
 import { prisma } from "../config/prisma.js";
 import { de } from "date-fns/locale";
 
+const DEFAULT_USER_ID = "user-0";
+
 //전체 리스트 조회 --> 우선 확인용 테스트용 이렇게 다시 쓴 이유 corp 에는 전체
 //조회 현재 코드에서는 이름 태그 카테고리만 필요하기에 다시 조회
 export async function listCorpinCompare({ offset, limit, order, search }) {
@@ -101,7 +103,7 @@ export async function getCorpinCompare(id) {
 }
 
 // 나의 기업 생성 및 수정
-export async function postMyCompareandOptionCount(userId, corpId) {
+export async function postMyCompareandOptionCount(corpId) {
   await deleteMyCompareCorp();
   await deleteCompareCorp();
   await getCorpinCompare(corpId);
@@ -110,7 +112,7 @@ export async function postMyCompareandOptionCount(userId, corpId) {
   const compare = await prisma.my_compare_corp.upsert({
     where: {
       userId_corpId: {
-        userId,
+        userId: DEFAULT_USER_ID,
         corpId,
       },
     },
@@ -119,7 +121,7 @@ export async function postMyCompareandOptionCount(userId, corpId) {
       updated_at: new Date(),
     },
     create: {
-      userId: userId,
+      userId: DEFAULT_USER_ID,
       corpId: corpId,
     },
   });
@@ -129,22 +131,22 @@ export async function postMyCompareandOptionCount(userId, corpId) {
 }
 
 // 비교 기업 생성 및 수정
-export async function postCompareandOptionCount(userId, corpId) {
+export async function postCompareandOptionCount(corpId) {
   await getCorpinCompare(corpId);
 
   // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
   const compare = await prisma.compare_corp.upsert({
     where: {
-      userId_corpId: { userId, corpId },
+      userId_corpId: { userId: DEFAULT_USER_ID, corpId },
     },
     update: {
       isDeleted: false,
-      userId: userId,
+      userId: DEFAULT_USER_ID,
       corpId: corpId,
       updated_at: new Date(),
     },
     create: {
-      userId: userId,
+      userId: DEFAULT_USER_ID,
       corpId: corpId,
     },
   });
@@ -152,13 +154,13 @@ export async function postCompareandOptionCount(userId, corpId) {
   return compare;
 }
 
-export async function postOptionCount(userId, corpId) {
-  await getCorpinCompare(userId, corpId);
+export async function postOptionCount(corpId) {
+  await getCorpinCompare(corpId);
 
   const optionCount = await prisma.option_count.upsert({
     where: {
       userId_corpId: {
-        userId,
+        userId: DEFAULT_USER_ID,
         corpId,
       },
     },
@@ -167,7 +169,7 @@ export async function postOptionCount(userId, corpId) {
       updated_at: new Date(),
     },
     create: {
-      userId,
+      userId: DEFAULT_USER_ID,
       corpId,
       compare_corp: 1,
     },
@@ -175,13 +177,13 @@ export async function postOptionCount(userId, corpId) {
   return optionCount;
 }
 
-export async function postMyOptionCount(userId, corpId) {
-  await getCorpinCompare(userId, corpId);
+export async function postMyOptionCount(corpId) {
+  await getCorpinCompare(corpId);
 
   const optionCountMy = await prisma.option_count.upsert({
     where: {
       userId_corpId: {
-        userId,
+        userId: DEFAULT_USER_ID,
         corpId,
       },
     },
@@ -190,7 +192,7 @@ export async function postMyOptionCount(userId, corpId) {
       updated_at: new Date(),
     },
     create: {
-      userId,
+      userId: DEFAULT_USER_ID,
       corpId,
       my_compare_corp: 1,
     },
@@ -230,7 +232,7 @@ export async function getCompareSetCorp({
   }
   const myCompare = await prisma.my_compare_corp.findMany({
     where: {
-      userId,
+      userId: DEFAULT_USER_ID,
       isDeleted: false,
     },
     select: {
@@ -263,6 +265,7 @@ export async function getCompareSetCorp({
       ],
     };
   }
+  const total = await prisma.corp.count({ where });
   //나의 기업 비교 기업 조회시에 확인을 위해 세팅
   const compareCorps = await prisma.corp.findMany({
     where,
@@ -276,17 +279,17 @@ export async function getCompareSetCorp({
     },
   });
 
-  return compareCorps;
+  return { compareCorps, total };
 }
 
 //비교 기업 + 전체 기업 조회 -> 나의 기업에서 선택 버튼 누르면 어차피
 //비교 기업 테이블에 없으면 생성 있으면 isDelete를 조회해서 세팅함
-export async function getCompare({ offset, limit, order, search, userId }) {
+export async function getCompare({ offset, limit, order, search }) {
   const corps = await listCorpinCompare({ offset, limit, order, search });
 
   const compare = await prisma.compare_corp.findMany({
     where: {
-      userId,
+      userId: DEFAULT_USER_ID,
       isDeleted: false,
     },
     orderBy: { created_at: "desc" },
@@ -309,7 +312,7 @@ export async function getCompare({ offset, limit, order, search, userId }) {
 
 //나의 기업 + 전체 기업 조회 -> 나의 기업에서 선택 버튼 누르면 어차피
 //나의 기업 테이블에 없으면 생성 있으면 isDelete를 조회해서 세팅함
-export async function getMyCompare({ offset, limit, order, search, userId }) {
+export async function getMyCompare({ offset, limit, order, search }) {
   const corps = await getCompareSetCorp({
     offset,
     limit,
@@ -320,7 +323,7 @@ export async function getMyCompare({ offset, limit, order, search, userId }) {
 
   const compare = await prisma.my_compare_corp.findMany({
     where: {
-      userId,
+      userId: DEFAULT_USER_ID,
     },
     orderBy: { created_at: "desc" },
     skip: parseInt(offset),
@@ -347,7 +350,7 @@ export async function deleteCompareCorp(userId) {
 
   const compare = await prisma.compare_corp.updateMany({
     where: {
-      userId,
+      userId: DEFAULT_USER_ID,
       isDeleted: false,
     },
     data: {
@@ -358,7 +361,7 @@ export async function deleteCompareCorp(userId) {
 
   // const optionCount = await prisma.option_count.updateMany({
   //   where: {
-  //     userId,
+  //     userId: DEFAULT_USER_ID,
   //     corpId,
   //     compare_corp: { gt:0 }
   //   },
@@ -377,7 +380,7 @@ export async function deleteMyCompareCorp(userId) {
 
   const compare = await prisma.my_compare_corp.updateMany({
     where: {
-      userId,
+      userId: DEFAULT_USER_ID,
       isDeleted: false,
     },
     data: {
@@ -388,7 +391,7 @@ export async function deleteMyCompareCorp(userId) {
 
   // const optionCount = await prisma.option_count.updateMany({
   //   where: {
-  //     userId,
+  //     userId: DEFAULT_USER_ID,
   //     corpId,
   //     my_compare_corp: { gt:0 }
   //   },
@@ -402,12 +405,12 @@ export async function deleteMyCompareCorp(userId) {
 }
 
 //나의 기업 id 검색해서 지우기
-export async function deleteMyCompareandOptionCount(userId, corpId) {
-  await getCorpinCompare(userId, corpId);
+export async function deleteMyCompareandOptionCount(corpId) {
+  await getCorpinCompare(corpId);
   // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
   const compare = await prisma.my_compare_corp.updateMany({
     where: {
-      userId,
+      userId: DEFAULT_USER_ID,
       corpId,
       isDeleted: false,
     },
@@ -421,12 +424,12 @@ export async function deleteMyCompareandOptionCount(userId, corpId) {
 }
 
 // 비교 기업 id 검색해서 지우기
-export async function deleteCompareandOptionCount(userId, corpId) {
-  await getCorpinCompare(userId, corpId);
+export async function deleteCompareandOptionCount(corpId) {
+  await getCorpinCompare(corpId);
   // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
   const compare = await prisma.compare_corp.updateMany({
     where: {
-      userId,
+      userId: DEFAULT_USER_ID,
       corpId,
       isDeleted: false,
     },
@@ -439,11 +442,11 @@ export async function deleteCompareandOptionCount(userId, corpId) {
   return compare;
 }
 
-export async function getMyCompareAndMyCompare(userId) {
+export async function getMyCompareAndMyCompare() {
   const [compare, myCompare] = await Promise.all([
     prisma.my_compare_corp.findMany({
       where: {
-        userId,
+        userId: DEFAULT_USER_ID,
         isDeleted: false,
       },
       select: {
@@ -453,7 +456,7 @@ export async function getMyCompareAndMyCompare(userId) {
 
     prisma.compare_corp.findMany({
       where: {
-        userId,
+        userId: DEFAULT_USER_ID,
         isDeleted: false,
       },
       select: {
