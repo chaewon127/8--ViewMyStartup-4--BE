@@ -5,76 +5,82 @@ import { skip } from "node:test";
 const investmentService = {
   /* 투자 현황 조회 페이지 */
   getInvestments: async ({ offset, limit, sortBy, order }) => {
-    switch (sortBy) {
-      case "virtual": {
-        // 가상 투자 금액 합산 후 정렬, 합산은 DB에서 SUM 쿼리로 실행
-        const virtualInvestments = await prisma.investment.groupBy({
-          by: ["corpId"],
-          _sum: { amount: true },
-          orderBy: { _sum: { amount: order } },
-          skip: offset,
-          take: limit,
-        });
-
-        // corp 데이터 가져오기
-        const corpIds = virtualInvestments.map((v) => v.corpId);
-        const corps = await prisma.corp.findMany({
-          where: { id: { in: corpIds } },
-          select: {
-            id: true,
-            corp_name: true,
-            corp_tag: true,
-            corp_profile: true,
-            total_investment: true,
+    if (sortBy === "virtual") {
+      // 가상 투자 금액 합산 후 정렬, 합산은 DB에서 SUM 쿼리로 실행
+      const virtualInvestments = await prisma.corp.findMany({
+        skip: offset,
+        take: limit,
+        orderBy: {
+          // 서브쿼리 합계 기준 정렬
+          Investment: {
+            _sum: { amount: order },
           },
-        });
-
-        //prisma.investment.groupBy와 prisma.corp.findMany 결과 합치기
-        const merged = virtualInvestments.map((v) => {
-          const corp = corps.find((c) => c.id === v.corpId);
-          return {
-            corpId: v.corpId,
-            corp_name: corp?.corp_name,
-            corp_tag: corp?.corp_tag,
-            corp_profile: corp?.corp_profile,
-            virtual_investment: v._sum.amount,
-            total_investment: corp?.total_investment,
-          };
-        });
-        /* merge한 결과 - _sum.amount와 corp 정보를 합쳐 최종 객체 생성
-        {
-          corpId: "abc123",
-          corp_name: "A Corp",
-          corp_tag: "IT",
-          corp_profile: "...",
-          virtual_investment: 5000,
-          total_investment: 10000
         },
-        */
+        select: {
+          id: true,
+          corp_name: true,
+          corp_tag: true,
+          corp_profile: true,
+          total_investment: true,
+          Investment: {
+            select: { amount: true },
+          },
+        },
+      });
 
-        const virtualTotal = await prisma.investment.groupBy({
-          by: ["corpId"],
-          _count: { corpId: true },
-        });
+      //가상 투자 금액 정렬과 실제 누적 투자 금액 정렬 결과 합치기
+      const merged = virtualInvestments.map((corp) => {
+        const virtualSum = corp.Investment.reduce(
+          (acc, inv) => acc + inv.amount,
+          0
+        );
+        return {
+          corpId: corp.id,
+          corp_name: corp.corp_name,
+          corp_tag: corp.corp_tag,
+          corp_profile: corp.corp_profile,
+          virtual_investment: virtualSum,
+          total_investment: corp.total_investment,
+        };
+      });
+      /* merge한 결과 - _sum.amount와 corp 정보를 합쳐 최종 객체 생성
+      {
+        corpId: "abc123",
+        corp_name: "A Corp",
+        corp_tag: "IT",
+        corp_profile: "...",
+        virtual_investment: 5000,
+        total_investment: 10000
+      },
+      */
 
-        return { data: merged, total: virtualTotal.length };
-      }
-      case "real": {
-        // 실제 누적 투자 금액 정렬
-        const realInvestments = await prisma.corp.findMany({
-          orderBy: { total_investment: order },
-          skip: offset,
-          take: limit,
-        });
+      const total = await prisma.corp.count({
+        where: { Investment: { some: {} } }, // 투자 기록이 있는 기업 수, total
+      });
 
-        const realTotal = await prisma.corp.count(); // total
-
-        return { data: realInvestments, total: realTotal };
-      }
-
-      default:
-        throw new Error("Invaild sortBy value");
+      return { data: merged, total };
     }
+
+    if (sortBy === "real") {
+      const realInvestments = await prisma.corp.findMany({
+        skip: offset,
+        take: limit,
+        orderBy: { total_investment: order },
+        select: {
+          id: true,
+          corp_name: true,
+          corp_tag: true,
+          corp_profile: true,
+          total_investment: true,
+        },
+      });
+
+      const total = await prisma.corp.count();
+
+      return { data: realInvestments, total };
+    }
+
+    throw new Error("Invaild sortBy value");
   },
 
   /* 투자자 코멘트 리스트 조회 */
