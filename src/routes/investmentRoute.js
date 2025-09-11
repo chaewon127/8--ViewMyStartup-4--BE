@@ -61,7 +61,7 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
 
 /**
  * @openapi
- * /corp/{id}:
+ * /corp/{id}/comments:
  *   get:
  *     summary: 특정 기업 투자 댓글 조회
  *     tags:
@@ -101,13 +101,13 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
  *                     $ref: '#/components/schemas/Investment'
  */
 router.get(
-  "/corp/:id",
+  "/corp/:id/comment",
   asyncHandler(investmentController.getInvestmentComments)
 );
 
 /**
  * @openapi
- * /corp/{id}:
+ * /corp/{id}/comments:
  *   post:
  *     summary: 특정 기업 투자 댓글 작성
  *     tags:
@@ -156,13 +156,13 @@ router.get(
  *                   $ref: '#/components/schemas/Comment'
  */
 router.post(
-  "/corp/:id",
+  "/corp/:id/comment",
   asyncHandler(investmentController.createInvestmentComment)
 );
 
 /**
  * @openapi
- * /corp/{id}:
+ * /corp/{id}/comments:
  *   patch:
  *     summary: 특정 기업 투자 댓글 수정
  *     tags:
@@ -202,13 +202,13 @@ router.post(
  *                   $ref: '#/components/schemas/Comment'
  */
 router.patch(
-  "/corp/:id",
+  "/corp/:id/comment",
   asyncHandler(investmentController.updateInvestmentComment)
 );
 
 /**
  * @openapi
- * /corp/{id}:
+ * /corp/{id}/comments:
  *   delete:
  *     summary: 특정 기업 투자 댓글 삭제
  *     tags:
@@ -238,7 +238,7 @@ router.patch(
  *                   type: string
  */
 router.delete(
-  "/corp/:id",
+  "/corp/:id/comment",
   asyncHandler(investmentController.deleteInvestmentComment)
 );
 

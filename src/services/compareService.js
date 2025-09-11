@@ -374,12 +374,13 @@ export async function deleteMyCompareCorp() {
 }
 
 //나의 기업 id 검색해서 지우기
-export async function deleteMyCompareandOptionCount() {
-  await getCorpinCompare();
+export async function deleteMyCompareandOptionCount(corpId) {
+  await getCorpinCompare(corpId);
   // userid는 로그인 기능 제작할지 모르므로 일단 db에 저장한 id 세팅
   const compare = await prisma.my_compare_corp.updateMany({
     where: {
       userId: DEFAULT_USER_ID,
+      corpId,
       isDeleted: false,
     },
     data: {
