@@ -20,7 +20,7 @@ const app = express();
 //cors 오류 방지 - 모든 도메인 허용
 app.use(cors());
 app.use(express.json());
-app.use(morgan("combinded"));
+app.use(morgan("combined"));
 
 //Swagger UI
 app.use(
