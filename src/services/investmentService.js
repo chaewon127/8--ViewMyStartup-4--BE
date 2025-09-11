@@ -6,7 +6,7 @@ const investmentService = {
   /* 투자 현황 조회 페이지 */
   getInvestments: async ({ offset, limit, sortBy, order }) => {
     switch (sortBy) {
-      case "virtual":
+      case "virtual": {
         // 가상 투자 금액 합산 후 정렬, 합산은 DB에서 SUM 쿼리로 실행
         const virtualInvestments = await prisma.investment.groupBy({
           by: ["corpId"],
@@ -16,27 +16,61 @@ const investmentService = {
           take: limit,
         });
 
-        const virtualTotal = await prisma.investment.count(); // total
-        return { data: virtualInvestments, total: virtualTotal };
-      // if (!virtualInvestments || virtualInvestments.length === 0) {
-      //   return { data: [], message: "No Virtual Investments Found" };
-      // }
-      // return virtualInvestments;
+        // corp 데이터 가져오기
+        const corpIds = virtualInvestments.map((v) => v.corpId);
+        const corps = await prisma.corp.findMany({
+          where: { id: { in: corpIds } },
+          select: {
+            id: true,
+            corp_name: true,
+            corp_tag: true,
+            corp_profile: true,
+            total_investment: true,
+          },
+        });
 
-      case "real":
+        //prisma.investment.groupBy와 prisma.corp.findMany 결과 합치기
+        const merged = virtualInvestments.map((v) => {
+          const corp = corps.find((c) => c.id === v.corpId);
+          return {
+            corpId: v.corpId,
+            corp_name: corp?.corp_name,
+            corp_tag: corp?.corp_tag,
+            corp_profile: corp?.corp_profile,
+            virtual_investment: v._sum.amount,
+            total_investment: corp?.total_investment,
+          };
+        });
+        /* merge한 결과 - _sum.amount와 corp 정보를 합쳐 최종 객체 생성
+        {
+          corpId: "abc123",
+          corp_name: "A Corp",
+          corp_tag: "IT",
+          corp_profile: "...",
+          virtual_investment: 5000,
+          total_investment: 10000
+        },
+        */
+
+        const virtualTotal = await prisma.investment.groupBy({
+          by: ["corpId"],
+          _count: { corpId: true },
+        });
+
+        return { data: merged, total: virtualTotal.length };
+      }
+      case "real": {
         // 실제 누적 투자 금액 정렬
         const realInvestments = await prisma.corp.findMany({
-          orderBy: { total_investment: orderBy },
-          skip: parseInt(offset),
-          take: parseInt(limit),
+          orderBy: { total_investment: order },
+          skip: offset,
+          take: limit,
         });
 
         const realTotal = await prisma.corp.count(); // total
+
         return { data: realInvestments, total: realTotal };
-      // if (!realInvestments || realInvestments.length === 0) {
-      //   return { data: [], message: "No Real Investments Found" };
-      // }
-      // return realInvestments;
+      }
 
       default:
         throw new Error("Invaild sortBy value");
