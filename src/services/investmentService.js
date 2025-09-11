@@ -88,6 +88,7 @@ const investmentService = {
   /* 투자자 코멘트 리스트 조회 */
   getInvestmentComments: async ({ offset, limit }) => {
     const investmentComments = await prisma.investment.findMany({
+      where: { corpId: id },
       orderBy: { amount: "desc" },
       skip: parseInt(offset),
       take: parseInt(limit),
@@ -124,7 +125,7 @@ const investmentService = {
   createInvestmentComment: async ({
     name,
     amount,
-    comment,
+    amount_comment,
     password,
     passwordConfirm,
   }) => {
@@ -135,7 +136,7 @@ const investmentService = {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const investmentComment = await prisma.investment.create({
-      data: { name, amount, comment, password: hashedPassword },
+      data: { name, amount, amount_comment, password: hashedPassword },
       select: {
         account: true,
       },

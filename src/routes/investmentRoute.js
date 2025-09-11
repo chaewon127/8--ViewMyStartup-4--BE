@@ -101,7 +101,7 @@ router.get("/investments", asyncHandler(investmentController.getInvestments));
  *                     $ref: '#/components/schemas/Investment'
  */
 router.get(
-  "/corp/:id/comment",
+  "/corp/:id/comments",
   asyncHandler(investmentController.getInvestmentComments)
 );
 
@@ -156,7 +156,7 @@ router.get(
  *                   $ref: '#/components/schemas/Comment'
  */
 router.post(
-  "/corp/:id/comment",
+  "/corp/:id/comments",
   asyncHandler(investmentController.createInvestmentComment)
 );
 
@@ -202,7 +202,7 @@ router.post(
  *                   $ref: '#/components/schemas/Comment'
  */
 router.patch(
-  "/corp/:id/comment",
+  "/corp/:id/comments",
   asyncHandler(investmentController.updateInvestmentComment)
 );
 
@@ -238,7 +238,7 @@ router.patch(
  *                   type: string
  */
 router.delete(
-  "/corp/:id/comment",
+  "/corp/:id/comments",
   asyncHandler(investmentController.deleteInvestmentComment)
 );
 

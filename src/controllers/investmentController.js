@@ -22,6 +22,7 @@ const investmentController = {
   //투자자 코멘트 리스트 조회
   getInvestmentComments: async (req, res) => {
     const { offset = 0, limit = 5 } = req.query;
+    const { id } = req.params;
     const investmentComments = await investmentService.getInvestmentComments({
       offset,
       limit,
@@ -53,12 +54,12 @@ const investmentController = {
   //투자자 코멘트 글 수정
   updateInvestmentComment: async (req, res) => {
     const { id } = req.params;
-    const { name, amount, comment, password } = req.body;
+    const { name, amount, amount_comment, password } = req.body;
     const updatedInvestmentComment =
       await investmentService.updateInvestmentComment(id, {
         name,
         amount,
-        comment,
+        amount_comment,
         password,
       });
     res.send({
