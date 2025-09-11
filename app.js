@@ -37,7 +37,7 @@ app.get("/health", (req, res) => {
 app.use("/corp", corpRouter);
 app.use("/corpTotals", compareTotalRouter);
 app.use("/compare", compareRouter);
-app.use("/investments", investmentRouter);
+app.use("/", investmentRouter);
 
 //cron 스케쥴러 - 10분에 한 번씩
 cron.schedule("*/10 * * * *", async () => {
