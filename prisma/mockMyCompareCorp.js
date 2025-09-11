@@ -47,12 +47,13 @@ import User from "./mockUser.js";
 
 const generateMockMyCompare = (count = 60) => {
   const arr = [];
-  for (let i = 1; i <= count; i++) {
+  for (let i = 0; i < count; i++) {
+    const user = User[i % User.length];
+
     arr.push({
       id: `mycmp-${i}`,
       userId: user.id,
-      corpId: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
-      select_count: Math.floor(Math.random() * 50) + 10, // 선택횟수 높게
+      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
       created_at: new Date(),
       updated_at: new Date(),
     });

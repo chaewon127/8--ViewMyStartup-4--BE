@@ -50,21 +50,22 @@
 
 import User from "./mockUser.js";
 import Account from "./mockAccount.js";
-import Corp from "./mockCorp.js";
 
 const generateMockInvestment = (count = 60) => {
+  const comments = ["코드잇 투자", "초기 투자", "소액 투자", "재투자"];
+
   const investments = [];
-  for (let i = 0; i <= count; i++) {
+  for (let i = 0; i < count; i++) {
     const user = User[i % User.length];
-    const corp = Corp[i];
     const account = Account[i];
 
     investments.push({
       id: `inv-${i}`,
       userId: user.id,
-      corpId: corp.id,
+      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
       accountId: account.id,
       amount: BigInt(Math.floor(Math.random() * 50_000_000) + 1_000_000),
+      amount_comment: comments[i % comments.length],
       created_at: new Date(),
       updated_at: new Date(),
     });

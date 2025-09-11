@@ -39,18 +39,16 @@
 // export default Account;
 
 import User from "./mockUser.js";
-import Corp from "./mockCorp.js";
 
 const generateMockAccounts = (count = 60) => {
   const accounts = [];
-  for (let i = 0; i <= count; i++) {
+  for (let i = 0; i < count; i++) {
     const user = User[i % User.length];
-    const corp = Corp[i];
 
     accounts.push({
       id: `acc-${String(i).padStart(4, "0")}`,
       userId: user.id,
-      corpId: corp.id,
+      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
       created_at: new Date(),
       updated_at: new Date(),
     });

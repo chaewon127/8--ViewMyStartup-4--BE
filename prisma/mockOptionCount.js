@@ -54,11 +54,13 @@ import User from "./mockUser.js";
 
 const generateMockOptionCount = (count = 60) => {
   const arr = [];
-  for (let i = 1; i <= count; i++) {
+  for (let i = 0; i < count; i++) {
+    const user = User[i % User.length];
+
     arr.push({
       id: `opt-${i}`,
       userId: user.id,
-      corpId: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
+      corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
       my_compare_corp: Math.floor(Math.random() * 50) + 10,
       compare_corp: Math.floor(Math.random() * 50) + 10,
       created_at: new Date(),
