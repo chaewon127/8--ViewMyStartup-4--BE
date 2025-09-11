@@ -177,7 +177,7 @@ router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
 
 /**
  * @openapi
- * /compare/compareadd:
+ * /compare/comparead:
  *   get:
  *     summary: 선택된 기업 ID 목록(나의 기업 + 비교 기업)
  *     description: 현재 사용자에 대해 isDelete=false 인 my_compare_corp 및 compare_corp의 corpId를 평탄화하여 반환합니다.
@@ -194,10 +194,7 @@ router.delete("/mycorpinfo/:id", asyncHandler(deleteMyCompareCorpController));
  *                 type: string
  */
 
-router.get(
-  "/compare/comparead",
-  asyncHandler(getMyCompareAndMyCompareController)
-);
+router.get("/comparead", asyncHandler(getMyCompareAndMyCompareController));
 
 /**
  * @openapi
@@ -247,7 +244,7 @@ router.get(
  *       '500':
  *         description: 서버 오류
  */
-router.get("/compare/comparerank", asyncHandler(getRankingCompareController));
+router.get("/comparerank", asyncHandler(getRankingCompareController));
 
 /**
  * @openapi
@@ -286,7 +283,7 @@ router.get("/compare/comparerank", asyncHandler(getRankingCompareController));
  *       '500':
  *         description: 서버 오류
  */
-router.get("/compare/compareorder", asyncHandler(getOrderCompareController));
+router.get("/compareorder", asyncHandler(getOrderCompareController));
 
 /**
  * @openapi
@@ -321,7 +318,7 @@ router.get("/compare/compareorder", asyncHandler(getOrderCompareController));
  *       '500':
  *         description: 서버 오류
  */
-router.get("/compare/comparetotal", asyncHandler(getTotalCompareController));
+router.get("/comparetotal", asyncHandler(getTotalCompareController));
 
 // 이거 아래 안내리면 오류남 그냥 기업 조회 + 기업 선택 등
 /**

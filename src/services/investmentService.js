@@ -91,16 +91,13 @@ const investmentService = {
       orderBy: { amount: "desc" },
       skip: parseInt(offset),
       take: parseInt(limit),
-      select: {
-        Account: true,
-      },
     });
 
     if (!investmentComments || investmentComments.length === 0) {
       throw new Error("No comments found");
     }
 
-    return investmentCommetns;
+    return investmentComments;
   },
 
   // /* 투자자 코멘트 상세 조회 */
@@ -140,7 +137,7 @@ const investmentService = {
     const investmentComment = await prisma.investment.create({
       data: { name, amount, comment, password: hashedPassword },
       select: {
-        Account: true,
+        account: true,
       },
     });
     return investmentComment;
@@ -151,7 +148,7 @@ const investmentService = {
     const investmentComment = await prisma.investment.findUnique({
       where: { id },
       select: {
-        Account: true,
+        password: true,
       },
     });
     if (!investmentComment) {
@@ -159,7 +156,7 @@ const investmentService = {
     }
 
     /* brcypt: 비밀번호를 해시(암호화)해서 DB에 저장 */
-    const isValid = await bcrypt.compare(password, investment.password);
+    const isValid = await bcrypt.compare(password, investmentComment.password);
     if (!isValid) {
       throw new Error("Password is not valid");
     }
@@ -172,23 +169,25 @@ const investmentService = {
 
   /* 투자자 코멘트 글 삭제 */
   deleteInvestmentComment: async (id, password) => {
+    if (!password) throw new Error("Password is required");
+
     const investmentComment = await prisma.investment.findUnique({
       where: { id },
+      select: {
+        password: true,
+      },
     });
     if (!investmentComment) {
       throw new Error("Cannot find given id");
     }
 
-    const isValid = await bcrypt.compare(password, investment.password);
+    const isValid = await bcrypt.compare(password, investmentComment.password);
     if (!isValid) {
       throw new Error("Password is not valid");
     }
 
     await prisma.investment.delete({
       where: { id },
-      select: {
-        Account: true,
-      },
     });
     return true;
   },
