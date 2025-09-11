@@ -67,7 +67,7 @@ router.post(
 );
 
 /**
- * @swagger
+ * @openapi
  * /compare/optioncount/{id}:
  *   post:
  *     summary: 비교 기업 선택 수 증가
@@ -92,7 +92,7 @@ router.post(
 router.post("/optioncount/:id", asyncHandler(postOptionCountController));
 
 /**
- * @swagger
+ * @openapi
  * /compare/myoptioncount/{id}:
  *   post:
  *     summary: 나의 기업 선택 수 증가
