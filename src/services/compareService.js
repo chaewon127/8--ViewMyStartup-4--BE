@@ -52,6 +52,7 @@ export async function listCorpinCompare({offset, limit, order,search}){
       ],
     };
   }
+  const total = await prisma.corp.count({ where });
   //나의 기업 비교 기업 조회시에 확인을 위해 세팅 
   const compareCorps = await prisma.corp.findMany({
     where,
@@ -86,7 +87,8 @@ export async function listCorpinCompare({offset, limit, order,search}){
     ...c,
     investment_rank: rankMap.get(c.id) ?? null,
   }))
-  return compareCorpWithRanking;
+
+  return {compareCorpWithRanking, total};
 }
 
 //단일 기업 조회 임시 테스트용
@@ -100,7 +102,8 @@ export async function getCorpinCompare(id){
       corp_tag: true,
     }
   });
-  return compareCorp;
+  const total = await prisma.corp.count({ where });
+  return {compareCorp, total};
 }
 
 // 나의 기업 생성 및 수정
@@ -251,6 +254,7 @@ export async function getCompareSetCorp({ offset , limit , order, search }){
       ],
     };
   }
+  
   //나의 기업 비교 기업 조회시에 확인을 위해 세팅 
   const compareCorps = await prisma.corp.findMany({
     where,
@@ -514,7 +518,7 @@ export async function getOrderCompare({offset, limit, order}){
   const corpId = await getMyCompareAndMyCompare();
   if(!corpId.length) 
     return [];
-
+  
   const compareCorps = await prisma.corp.findMany({
     where: { id: { in: corpId } },
     orderBy: [orderBy, { created_at: 'desc' }],

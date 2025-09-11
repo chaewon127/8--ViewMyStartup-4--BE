@@ -51,7 +51,7 @@ export async function listCorp({offset, limit, order, search}){
       ],
     };
   }
-
+  const total = await prisma.corp.count({ where });
   const corps = await prisma.corp.findMany({
     where,
     orderBy: { created_at: 'desc' },
@@ -80,7 +80,7 @@ export async function listCorp({offset, limit, order, search}){
     ...c,
     investment_rank: rankMap.get(c.id) ?? null,
   }))
-  return compareCorpWithRanking;
+  return {compareCorpWithRanking, total};
 }
 
 
