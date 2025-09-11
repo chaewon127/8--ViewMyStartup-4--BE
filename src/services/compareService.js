@@ -200,13 +200,7 @@ export async function postMyOptionCount(corpId) {
   return optionCountMy;
 }
 
-export async function getCompareSetCorp({
-  offset,
-  limit,
-  order,
-  search,
-  userId,
-}) {
+export async function getCompareSetCorp({ offset, limit, order, search }) {
   let orderBy;
   switch (order) {
     case "investmentLowest":
@@ -344,7 +338,7 @@ export async function getMyCompare({ offset, limit, order, search }) {
 
 //gt는 0인지 확인용 decrement는 1 감소
 //비교기업 삭제
-export async function deleteCompareCorp(userId) {
+export async function deleteCompareCorp() {
   // await getCorpinCompare(corpId)
 
   const compare = await prisma.compare_corp.updateMany({
@@ -358,23 +352,11 @@ export async function deleteCompareCorp(userId) {
     },
   });
 
-  // const optionCount = await prisma.option_count.updateMany({
-  //   where: {
-  //     userId: DEFAULT_USER_ID,
-  //     corpId,
-  //     compare_corp: { gt:0 }
-  //   },
-  //   data: {
-  //     compare_corp: { decrement: 1 },
-  //     updated_at: new Date()
-  //   },
-  // });
-
   return { compare };
 }
 
 // 나의 기업 태그에서 삭제 시에
-export async function deleteMyCompareCorp(userId) {
+export async function deleteMyCompareCorp() {
   // await getCorpinCompare(corpId)
 
   const compare = await prisma.my_compare_corp.updateMany({
@@ -387,18 +369,6 @@ export async function deleteMyCompareCorp(userId) {
       updated_at: new Date(),
     },
   });
-
-  // const optionCount = await prisma.option_count.updateMany({
-  //   where: {
-  //     userId: DEFAULT_USER_ID,
-  //     corpId,
-  //     my_compare_corp: { gt:0 }
-  //   },
-  //   data: {
-  //     my_compare_corp: { decrement: 1 },
-  //     updated_at: new Date()
-  //   },
-  // });
 
   return { compare };
 }
