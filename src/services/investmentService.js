@@ -16,11 +16,12 @@ const investmentService = {
           take: limit,
         });
 
-        if (!virtualInvestments || virtualInvestments.length === 0) {
-          return { data: [], message: "No Virtual Investments Found" };
-        }
-
-        return virtualInvestments;
+        const virtualTotal = await prisma.investment.count(); // total
+        return { data: virtualInvestments, total: virtualTotal };
+      // if (!virtualInvestments || virtualInvestments.length === 0) {
+      //   return { data: [], message: "No Virtual Investments Found" };
+      // }
+      // return virtualInvestments;
 
       case "real":
         // 실제 누적 투자 금액 정렬
@@ -30,11 +31,12 @@ const investmentService = {
           take: parseInt(limit),
         });
 
-        if (!realInvestments || realInvestments.length === 0) {
-          return { data: [], message: "No Real Investments Found" };
-        }
-
-        return realInvestments;
+        const realTotal = await prisma.corp.count(); // total
+        return { data: realInvestments, total: realTotal };
+      // if (!realInvestments || realInvestments.length === 0) {
+      //   return { data: [], message: "No Real Investments Found" };
+      // }
+      // return realInvestments;
 
       default:
         throw new Error("Invaild sortBy value");

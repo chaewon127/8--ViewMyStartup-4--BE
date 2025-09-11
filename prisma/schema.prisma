@@ -30,6 +30,7 @@ model User {
   Account         Account[]
   Compare_corp    Compare_corp[]
   Option_count    Option_count[]
+  Investment      Investment[]
 }
 
 // M = 남자, F = 여자, N = 선택안함
@@ -55,6 +56,7 @@ model Corp {
   Account         Account[]
   Compare_corp    Compare_corp[]
   Option_count    Option_count[]
+  Investment      Investment[]
 }
 
 // 기업 비교 선택 횟수 테이블
@@ -63,7 +65,6 @@ model Option_count {
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String?
-
   corp   Corp?   @relation(fields: [corpId], references: [id], onDelete: Cascade)
   corpId String?
 
@@ -81,7 +82,6 @@ model Compare_corp {
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
-
   corp   Corp?   @relation(fields: [corpId], references: [id])
   corpId String?
 
@@ -98,7 +98,6 @@ model My_compare_corp {
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
-
   corp   Corp?   @relation(fields: [corpId], references: [id])
   corpId String?
 
@@ -115,6 +114,10 @@ model Investment {
 
   account   Account? @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  corp      Corp?    @relation(fields: [corpId], references: [id])
+  corpId    String?
 
   amount         Int
   amount_comment String
@@ -130,7 +133,6 @@ model Account {
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
-
   corp   Corp?   @relation(fields: [corpId], references: [id])
   corpId String?
 
