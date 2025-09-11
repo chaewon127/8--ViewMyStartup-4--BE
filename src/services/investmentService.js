@@ -144,7 +144,10 @@ const investmentService = {
   },
 
   /* 투자자 코멘트 글 수정 */
-  updateInvestmentComment: async (id, { name, amount, comment, password }) => {
+  updateInvestmentComment: async (
+    id,
+    { name, amount, amount_comment, password }
+  ) => {
     const investmentComment = await prisma.investment.findUnique({
       where: { id },
       select: {
@@ -163,7 +166,7 @@ const investmentService = {
 
     return prisma.investment.update({
       where: { id },
-      data: { name, amount, comment },
+      data: { name, amount, amount_comment },
     });
   },
 
