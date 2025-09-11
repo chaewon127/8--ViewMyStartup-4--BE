@@ -10,15 +10,15 @@ const investmentService = {
       const corps = await prisma.corp.findMany({
         skip: offset,
         take: limit,
-        include: {
-          Investment: { select: { amount: true } },
-        },
         select: {
           id: true,
           corp_name: true,
           corp_tag: true,
           corp_profile: true,
           total_investment: true,
+          Investment: {
+            select: { amount: true },
+          },
         },
       });
 
