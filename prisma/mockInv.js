@@ -48,6 +48,7 @@
 
 // export default Investment;
 
+import bcrypt from "bcrypt";
 import User from "./mockUser.js";
 import Account from "./mockAccount.js";
 
@@ -59,12 +60,15 @@ const generateMockInvestment = (count = 60) => {
     const user = User[i % User.length];
     const account = Account[i];
 
+    // const hashedPassword = await bcrypt.hash("1234", 10);
+
     investments.push({
       id: `inv-${i}`,
       userId: user.id,
       corpId: `11111111-aaaa-bbbb-cccc-${String(i + 1).padStart(12, "0")}`,
       accountId: account.id,
       name: user.name,
+      password: "1234",
       amount: Math.floor(Math.random() * 50_000_000) + 1_000_000,
       amount_comment: comments[i % comments.length],
       created_at: new Date(),
