@@ -181,7 +181,7 @@ router.post(
  *           schema:
  *             type: object
  *             required:
- *               - comment
+ *               - amount_comment
  *               - password
  *             properties:
  *               comment:
