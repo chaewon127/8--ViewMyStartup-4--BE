@@ -4,6 +4,26 @@ import { prisma } from "../config/prisma.js";
 // 전체 리스트 누적 투자 금액은 투자 테이블 조회 방식에 대해 논의 필요
 export async function listCorp({ offset, limit, order, search }) {
   //리스트 누적 투자 금액 자동으로 계산하는 코드 아래 있음.
+  async function updateCropTotalInvestment() {
+    const allCorps = await prisma.corp.findMany({ select: { id: true } });
+
+    const updatePromises = allCorps.map(async (corp) => {
+      const totalInvestmentResult = await prisma.investment.aggregate({
+        _sum: { amount: true },
+        where: { corpId: corp.id },
+      });
+
+      const totalInvestment = totalInvestmentResult._sum.amount ?? 0n;
+
+      await prisma.corp.update({
+        where: { id: corp.id },
+        data: { total_investment: totalInvestment },
+      });
+    });
+
+    await Promise.all(updatePromises);
+  }
+
   await updateCropTotalInvestment();
 
   //orderBy로 조회 순서 정하기 게시판 조회 순서를 세팅하기 위해서
@@ -55,7 +75,7 @@ export async function listCorp({ offset, limit, order, search }) {
   const total = await prisma.corp.count({ where });
   const corps = await prisma.corp.findMany({
     where,
-    orderBy: { created_at: "desc" },
+    orderBy,
     skip: parseInt(offset),
     take: parseInt(limit),
   });
