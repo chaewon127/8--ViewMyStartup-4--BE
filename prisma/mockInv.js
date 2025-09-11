@@ -48,13 +48,22 @@
 
 // export default Investment;
 
+import User from "./mockUser.js";
+import Account from "./mockAccount.js";
+import Corp from "./mockCorp.js";
+
 const generateMockInvestment = (count = 60) => {
   const investments = [];
-  for (let i = 1; i <= count; i++) {
+  for (let i = 0; i <= count; i++) {
+    const user = User[i % User.length];
+    const corp = Corp[i];
+    const account = Account[i];
+
     investments.push({
       id: `inv-${i}`,
-      user_id: `user-${String(i).padStart(4, "0")}`,
-      corp_id: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
+      userId: user.id,
+      corpId: corp.id,
+      accountId: account.id,
       amount: BigInt(Math.floor(Math.random() * 50_000_000) + 1_000_000),
       created_at: new Date(),
       updated_at: new Date(),

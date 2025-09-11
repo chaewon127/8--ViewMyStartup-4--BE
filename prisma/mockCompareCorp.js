@@ -46,13 +46,15 @@
 
 // Compare_corp용
 
+import User from "./mockUser.js";
+
 const generateMockCompare = (count = 60) => {
   const arr = [];
   for (let i = 1; i <= count; i++) {
     arr.push({
       id: `cmp-${i}`,
-      user_id: `user-${String(i).padStart(4, "0")}`,
-      corp_id: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
+      userId: user.id,
+      corpId: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
       select_count: Math.floor(Math.random() * 50) + 10,
       created_at: new Date(),
       updated_at: new Date(),

@@ -50,12 +50,14 @@
 
 // Compare_corp용
 
+import User from "./mockUser.js";
+
 const generateMockOptionCount = (count = 60) => {
   const arr = [];
   for (let i = 1; i <= count; i++) {
     arr.push({
       id: `opt-${i}`,
-      userId: `user-${String((i % 5) + 1).padStart(4, "0")}`,
+      userId: user.id,
       corpId: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
       my_compare_corp: Math.floor(Math.random() * 50) + 10,
       compare_corp: Math.floor(Math.random() * 50) + 10,

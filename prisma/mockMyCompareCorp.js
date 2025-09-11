@@ -43,13 +43,15 @@
 
 // export default MyCompareCorp;
 
+import User from "./mockUser.js";
+
 const generateMockMyCompare = (count = 60) => {
   const arr = [];
   for (let i = 1; i <= count; i++) {
     arr.push({
       id: `mycmp-${i}`,
-      user_id: `user-${String(i).padStart(4, "0")}`,
-      corp_id: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
+      userId: user.id,
+      corpId: `11111111-aaaa-bbbb-cccc-${String(i).padStart(12, "0")}`,
       select_count: Math.floor(Math.random() * 50) + 10, // 선택횟수 높게
       created_at: new Date(),
       updated_at: new Date(),

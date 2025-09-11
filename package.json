@@ -11,6 +11,7 @@
     "express": "^5.1.0",
     "is-email": "^1.0.2",
     "is-uuid": "^1.0.2",
+    "morgan": "^1.10.1",
     "node-cron": "^4.2.1",
     "superstruct": "^1.0.3",
     "swagger-jsdoc": "^6.2.8",
