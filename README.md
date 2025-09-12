@@ -30,6 +30,9 @@ README.md
 - DB 스키마 마이그레이션
 - 투자 API 기능(투자 현황 조회, 투자 댓글 CRUD)
 - 로그인/회원가입 API 기능
+- 스웨거 문서 작성 및 오류 해결
+<img width="1439" height="2864" alt="스웨거 문서" src="https://github.com/user-attachments/assets/185bc163-2b86-4217-b1c2-be016a147b50" />
+
 
 홍명주
 - 나의 기업 비교하기 페이지 개발
@@ -125,5 +128,5 @@ src/
 - 백엔드: https://eight-viewmystartup-4-be.onrender.com/api-docs/
 
 프로젝트 회고록 / 참고 레포
-프론트 레포: https://github.com/chaewon127/8--ViewMyStartup-4--FE
-회고록: 4팀_ViewMyStartup_발표자료.pdf 참고고
+- 프론트 레포: https://github.com/chaewon127/8--ViewMyStartup-4--FE
+- 회고록: 4팀_ViewMyStartup_발표자료.pdf 참고고
