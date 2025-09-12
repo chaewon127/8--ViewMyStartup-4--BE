@@ -176,6 +176,12 @@ router.post(
  *         schema:
  *           type: string
  *         description: 투자 ID
+ *       - in: query
+ *         name: password
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 댓글 수정용 비밀번호
  *     requestBody:
  *       required: true
  *       content:
