@@ -61,6 +61,7 @@ export async function listCorpinCompare({ offset, limit, order, search }) {
       id: true,
       corp_name: true,
       corp_tag: true,
+      corp_image: true,
     },
   });
   //랭킹
@@ -97,6 +98,7 @@ export async function getCorpinCompare(id) {
       id: true,
       corp_name: true,
       corp_tag: true,
+      corp_image: true,
     },
   });
   return compareCorp;
@@ -270,6 +272,7 @@ export async function getCompareSetCorp({ offset, limit, order, search }) {
       id: true,
       corp_name: true,
       corp_tag: true,
+      corp_image: true,
     },
   });
 
