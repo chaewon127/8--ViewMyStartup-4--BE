@@ -3,7 +3,7 @@ README.md
 
 ## 불사조
 
-팀 노션: [원문 제공 링크 (확인 필요)](https://www.notion.so/257055487fec81ad9458f8c6849b2f6e?v=257055487fec81818b38000c2e3c88e2&source=copy_link)
+팀 노션: https://www.notion.so/257055487fec81ad9458f8c6849b2f6e?v=257055487fec81818b38000c2e3c88e2&source=copy_link
 
 ### 팀원 구성
 - 황채원
@@ -130,4 +130,4 @@ src/
 
 프로젝트 회고록 / 참고 레포
 - 프론트 레포: https://github.com/chaewon127/8--ViewMyStartup-4--FE
-- 회고록: 4팀_ViewMyStartup_발표자료.pdf 참고고
+- 회고록: 4팀_ViewMyStartup_발표자료.pdf 참고
