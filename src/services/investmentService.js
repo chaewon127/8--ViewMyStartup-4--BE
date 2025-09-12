@@ -15,6 +15,7 @@ const investmentService = {
           corp_name: true,
           corp_tag: true,
           corp_profile: true,
+          corp_image: true,
           total_investment: true,
           Investment: {
             select: { amount: true },
@@ -33,6 +34,7 @@ const investmentService = {
           corp_name: corp.corp_name,
           corp_tag: corp.corp_tag,
           corp_profile: corp.corp_profile,
+          corp_image: corp.corp_image,
           virtual_investment: virtualSum,
           total_investment: corp.total_investment,
         };

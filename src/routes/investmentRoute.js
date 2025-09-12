@@ -105,6 +105,8 @@ router.get(
   asyncHandler(investmentController.getInvestmentComments)
 );
 
+// comments 경로는 코드잇 강의 HTML 핵심 개념 - 페이지 안에서 이동하기 참고
+
 /**
  * @openapi
  * /corp/{id}/comments:
