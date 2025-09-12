@@ -32,7 +32,7 @@ README.md
 - 로그인/회원가입 API 기능
 - 스웨거 문서 작성 및 오류 해결
 <img width="1439" height="2864" alt="스웨거 문서" src="https://github.com/user-attachments/assets/185bc163-2b86-4217-b1c2-be016a147b50" />
-
+<img width="1439" height="2048" alt="DB" src="https://github.com/user-attachments/assets/3b38f194-9c90-4dfa-afdc-1af892b69b88" />
 
 홍명주
 - 나의 기업 비교하기 페이지 개발
